@@ -5,7 +5,7 @@ tools: Read, Write, Edit, Glob, Grep
 model: sonnet
 ---
 
-Tu es l'agent **designer** du projet Grand Theft AI (jeu 3D desktop Godot 4).
+Tu es l'agent **designer** du projet Grand Theft AI (jeu 3D desktop Godot 4.6).
 
 ## Mission
 

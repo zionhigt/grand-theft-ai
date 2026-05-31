@@ -260,14 +260,14 @@ Tous les assets sont mockés inline dans `main.tscn`. Aucun fichier `.tres` exte
 ## Dépendances
 
 - **Spec 01 — Bootstrap projet** (`docs/specs/01-bootstrap.md`) : fournit `main.tscn` (nœud racine `Main`, `Camera3D`, `WorldEnvironment`) et `project.godot` valide. Cette spec 02 est une modification incrémentale de la scène issue de la spec 01.
-- **`addons/gut/`** : addon GUT v9.x ou supérieur, compatible Godot 4. Déjà installé depuis la feature 01.
+- **`addons/gut/`** : addon GUT v9.4 ou supérieur, compatible Godot 4.6. Déjà installé depuis la feature 01.
 - Aucun autre addon autorisé.
 
 ## Critères d'acceptation
 
 - [ ] Le fichier `src/world/world_builder.gd` est présent, `class_name WorldBuilder` est reconnue par GDScript sans erreur de parse.
 - [ ] La commande `godot --headless -s res://addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` retourne le code de sortie 0 (tous les tests de `test_02_scene_3d_minimale.gd` passent au vert).
-- [ ] `main.tscn` s'ouvre dans l'éditeur Godot 4 sans warning rouge ni erreur de ressource manquante.
+- [ ] `main.tscn` s'ouvre dans l'éditeur Godot 4.6 sans warning rouge ni erreur de ressource manquante.
 - [ ] L'arbre de la scène dans l'éditeur affiche exactement : `Main > WorldEnvironment`, `Main > DirectionalLight3D`, `Main > Ground`, `Main > Camera3D`.
 - [ ] `godot --path . res://main.tscn` se lance sans `ERROR:` ni `SCRIPT ERROR:` dans la console.
 - [ ] Visuellement au lancement : ciel dégradé bleu (zénith soutenu vers horizon pâle), sol vert sombre continu, lumière directionnelle éclairant le sol (pas de teinte plate uniforme), horizon visible dans le cadre depuis la position caméra `Vector3(0, 8, 15)`.

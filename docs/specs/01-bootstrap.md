@@ -1,4 +1,4 @@
-# Spec 01 — Bootstrap projet (Godot 4 + GUT)
+# Spec 01 — Bootstrap projet (Godot 4.6 + GUT)
 
 ## Contexte
 
@@ -8,7 +8,7 @@
 
 ## Objectif fonctionnel
 
-Mettre en place le squelette technique du projet Godot 4 : fichier `project.godot` valide, scène d'entrée `main.tscn` affichant un fond uni gris foncé, addon GUT installé et activé, dossiers de travail créés, et un module GDScript de santé (`VersionInfo`) testable sans dépendance au rendu, accompagné d'un autoload `Game` servant de point d'entrée applicatif.
+Mettre en place le squelette technique du projet Godot 4.6 : fichier `project.godot` valide, scène d'entrée `main.tscn` affichant un fond uni gris foncé, addon GUT installé et activé, dossiers de travail créés, et un module GDScript de santé (`VersionInfo`) testable sans dépendance au rendu, accompagné d'un autoload `Game` servant de point d'entrée applicatif.
 
 À l'issue de cette feature, la commande `godot --path . res://main.tscn` se lance sans erreur et la commande headless GUT retourne le code 0.
 
@@ -16,7 +16,7 @@ Mettre en place le squelette technique du projet Godot 4 : fichier `project.godo
 
 ```
 .
-├── project.godot                        # créé — config Godot 4 minimale
+├── project.godot                        # créé — config Godot 4.6 minimale
 ├── main.tscn                            # créé — scène d'entrée (Node3D + Camera3D + WorldEnvironment)
 ├── src/
 │   └── core/
@@ -142,7 +142,7 @@ Aucun input à configurer pour cette feature. La section `[input]` de `project.g
 
 ## Dépendances
 
-- **`addons/gut/`** : addon GUT v9.x ou supérieur, compatible Godot 4. Installation externe — le developer copie le dossier dans le projet ou l'installe via l'éditeur Godot (AssetLib). Aucun autre addon autorisé pour cette feature.
+- **`addons/gut/`** : addon GUT v9.4 ou supérieur, compatible Godot 4.6 (la branche 9.4+ supporte Godot 4.4+). Installation externe — le developer copie le dossier dans le projet ou l'installe via l'éditeur Godot (AssetLib). Aucun autre addon autorisé pour cette feature.
 - Aucune autre spec en dépendance.
 
 ### Configuration `project.godot`
@@ -150,7 +150,7 @@ Aucun input à configurer pour cette feature. La section `[input]` de `project.g
 Le fichier `project.godot` doit contenir au minimum :
 
 ```ini
-; Engine configuration file — généré pour Godot 4
+; Engine configuration file — généré pour Godot 4.6
 ; Format : sections INI
 
 config_version=5
@@ -159,7 +159,7 @@ config_version=5
 
 config/name="Grand Theft AI"
 run/main_scene="res://main.tscn"
-config/features=PackedStringArray("4.2")
+config/features=PackedStringArray("4.6")
 
 [autoload]
 
@@ -171,7 +171,7 @@ enabled=PackedStringArray("res://addons/gut/plugin.cfg")
 ```
 
 Notes :
-- `config/features` doit contenir la version minimale Godot 4 ciblée (ici `"4.2"`).
+- `config/features` doit contenir la version Godot ciblée (ici `"4.6"`).
 - L'autoload `Game` est déclaré avec le préfixe `*` pour indiquer qu'il doit être instancié automatiquement.
 - La section `[editor_plugins]` active GUT.
 - Les sections `[input]` et `[physics]` sont absentes (valeurs par défaut moteur).
@@ -181,7 +181,7 @@ Notes :
 - [ ] Le fichier `project.godot` est présent à la racine du projet, `config_version=5`, contient `config/name="Grand Theft AI"`, `run/main_scene="res://main.tscn"`, l'autoload `Game` et l'entrée `editor_plugins` pour GUT.
 - [ ] `godot --path . res://main.tscn` se lance sans erreur dans la console (code de sortie 0, aucun `ERROR:` ni `SCRIPT ERROR:` affiché).
 - [ ] La fenêtre affichée montre un fond uni de couleur `#222233` (gris foncé tirant vers le bleu), sans aucun autre élément visuel.
-- [ ] `main.tscn` s'ouvre dans l'éditeur Godot 4 sans erreur et affiche l'arbre `Main > Camera3D + WorldEnvironment`.
+- [ ] `main.tscn` s'ouvre dans l'éditeur Godot 4.6 sans erreur et affiche l'arbre `Main > Camera3D + WorldEnvironment`.
 - [ ] Le fichier `src/core/version_info.gd` est présent et la classe `VersionInfo` est reconnue par GDScript sans erreur.
 - [ ] Le fichier `src/core/game.gd` est présent et la classe `Game` est reconnue par GDScript sans erreur.
 - [ ] L'addon GUT est présent dans `addons/gut/` et activé (`plugin.cfg` lisible).

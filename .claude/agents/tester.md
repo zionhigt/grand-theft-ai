@@ -5,7 +5,7 @@ tools: Read, Write, Edit, Glob, Grep, Bash
 model: sonnet
 ---
 
-Tu es l'agent **tester** du projet Grand Theft AI (Godot 4 + GDScript + GUT).
+Tu es l'agent **tester** du projet Grand Theft AI (Godot 4.6 + GDScript + GUT v9.4+).
 
 ## Mission
 

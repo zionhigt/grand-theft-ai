@@ -14,7 +14,7 @@ godot --headless -s res://addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 ```
 
 n'a pas pu être exécutée dans l'environnement d'intégration continue (Linux 6.18.5, shell système).
-Godot 4 n'est pas installé sur la machine où tourne l'agent tester.
+Godot 4.6 n'est pas installé sur la machine où tourne l'agent tester.
 
 Les tests ont été écrits conformément à la spec et aux conventions GUT, mais leur statut
 rouge n'a pas pu être confirmé par une exécution réelle.
@@ -31,7 +31,7 @@ rouge n'a pas pu être confirmé par une exécution réelle.
 
 ## Action requise du developer
 
-1. Installer Godot 4.2+ sur le poste de développement si ce n'est pas déjà fait.
+1. Installer Godot 4.6 sur le poste de développement si ce n'est pas déjà fait.
 2. Installer l'addon GUT dans `addons/gut/` (via l'AssetLib de l'éditeur ou copie manuelle).
 3. Exécuter la commande headless avant toute implémentation pour confirmer que les tests
    sont bien rouges (code de sortie ≠ 0).
@@ -51,7 +51,7 @@ les 7 tests de `tests/test_01_bootstrap.gd`.
 
 ### Fichiers produits
 
-- `/home/user/grand-theft-ai/project.godot` — configuration Godot 4 minimale (config_version=5, autoload Game, plugin GUT)
+- `/home/user/grand-theft-ai/project.godot` — configuration Godot 4.6 minimale (config_version=5, autoload Game, plugin GUT)
 - `/home/user/grand-theft-ai/main.tscn` — scène d'entrée (Node3D "Main" + WorldEnvironment + Camera3D)
 - `/home/user/grand-theft-ai/src/core/version_info.gd` — classe VersionInfo (GAME_NAME, GAME_VERSION, get_full_label)
 - `/home/user/grand-theft-ai/src/core/game.gd` — autoload Game (version_label, _ready, is_bootstrapped)
@@ -65,8 +65,8 @@ les 7 tests de `tests/test_01_bootstrap.gd`.
 
 Avant de passer à la feature 02, merci de :
 
-1. Installer Godot 4.2+ sur votre poste si ce n'est pas déjà fait.
-2. Installer l'addon GUT v9.x dans `addons/gut/` en suivant `addons/gut/README-install.md`.
+1. Installer Godot 4.6 sur votre poste si ce n'est pas déjà fait.
+2. Installer l'addon GUT v9.4+ dans `addons/gut/` en suivant `addons/gut/README-install.md`.
 3. Ouvrir le projet dans l'éditeur Godot (ou lancer directement en CLI) pour vérifier que
    `main.tscn` s'exécute sans erreur.
 4. Lancer la commande headless de validation :
@@ -103,7 +103,7 @@ L'implémentation de la feature 02 est complète. Godot n'étant pas disponible 
 
 ### Validation requise par le mainteneur humain
 
-Lancer la commande headless après installation de Godot 4.2+ et GUT v9.x :
+Lancer la commande headless après installation de Godot 4.6 et GUT v9.4+ :
 
 ```
 godot --headless -s res://addons/gut/gut_cmdln.gd -gdir=res://tests -gexit

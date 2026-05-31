@@ -1,6 +1,6 @@
 # Boucle d'itération
 
-Comment l'orchestrateur (l'agent principal) fait avancer le projet jusqu'au prototype v0.1 jouable sous Godot 4.
+Comment l'orchestrateur (l'agent principal) fait avancer le projet jusqu'au prototype v0.1 jouable sous Godot 4.6.
 
 ## Algorithme
 
@@ -52,7 +52,7 @@ Le `tester` et le `developer` ne peuvent pas exécuter GUT. Dans ce cas :
 
 - ils continuent d'écrire le code attendu (tests et implémentation),
 - ils notent dans `docs/exchanges/` l'absence d'exécution réelle,
-- la validation finale doit être effectuée par le mainteneur humain sur un poste avec Godot 4 installé.
+- la validation finale doit être effectuée par le mainteneur humain sur un poste avec Godot 4.6 et GUT v9.4+ installés.
 
 ## Critère d'arrêt
 

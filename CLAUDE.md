@@ -1,16 +1,16 @@
 # Grand Theft AI
 
-Jeu 3D desktop inspiré de GTA, développé sous **Godot 4** par une équipe de quatre agents Claude spécialisés et coordonnés.
+Jeu 3D desktop inspiré de GTA, développé sous **Godot 4.6** par une équipe de quatre agents Claude spécialisés et coordonnés.
 
 ## Objectif
 
-Itérer jusqu'à obtenir un **premier prototype jouable** : un personnage que l'on déplace dans un environnement 3D, qui peut monter dans un véhicule et le conduire dans une ville minimale, le tout exécuté par le moteur Godot 4 sur poste.
+Itérer jusqu'à obtenir un **premier prototype jouable** : un personnage que l'on déplace dans un environnement 3D, qui peut monter dans un véhicule et le conduire dans une ville minimale, le tout exécuté par le moteur Godot 4.6 sur poste.
 
 ## Stack technique
 
-- **Moteur** : Godot 4 (rendu 3D natif, physique intégrée, éditeur visuel, scènes `.tscn`)
+- **Moteur** : **Godot 4.6** (rendu 3D natif, physique intégrée, éditeur visuel, scènes `.tscn`). `config/features` du projet est figé sur `"4.6"`.
 - **Langage** : GDScript (scripts `.gd`)
-- **Tests unitaires** : GUT (Godot Unit Test) — addon installé dans `addons/gut/`
+- **Tests unitaires** : GUT (Godot Unit Test) v9.4 ou supérieur — addon installé dans `addons/gut/`
 - **Exécution headless des tests** :
   ```
   godot --headless -s res://addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
@@ -58,7 +58,7 @@ Aucun agent ne saute une étape. Le `developer` ne commence **jamais** sans test
 
 ```
 .
-├── project.godot         # projet Godot 4
+├── project.godot         # projet Godot 4.6
 ├── main.tscn             # scène d'entrée
 ├── src/                  # scripts GDScript de production (.gd)
 ├── scenes/               # scènes .tscn réutilisables

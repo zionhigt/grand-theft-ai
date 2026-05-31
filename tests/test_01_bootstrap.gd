@@ -1,6 +1,6 @@
 extends GutTest
 
-# Tests unitaires — Feature 01 : Bootstrap projet (Godot 4 + GUT)
+# Tests unitaires — Feature 01 : Bootstrap projet (Godot 4.6 + GUT)
 #
 # Chaque test cible un comportement numéroté de la spec docs/specs/01-bootstrap.md.
 #

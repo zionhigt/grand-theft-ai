@@ -4,13 +4,13 @@ Document maître, vivant. Source de vérité unique de l'état du projet. Chaque
 
 ## Vision
 
-Un jeu 3D **desktop** sous **Godot 4**, inspiré de GTA : ville ouverte minimale, personnage à pied, voitures conduisibles, caméra troisième personne. Objectif court terme : **prototype jouable v0.1**.
+Un jeu 3D **desktop** sous **Godot 4.6**, inspiré de GTA : ville ouverte minimale, personnage à pied, voitures conduisibles, caméra troisième personne. Objectif court terme : **prototype jouable v0.1**.
 
 ## Stack imposée
 
-- Godot 4 (moteur, rendu 3D, physique intégrée, éditeur visuel)
+- **Godot 4.6** (moteur, rendu 3D, physique intégrée, éditeur visuel). `config/features = PackedStringArray("4.6", "Forward Plus")` dans `project.godot`.
 - GDScript (langage des scripts `.gd`)
-- GUT — Godot Unit Test — addon dans `addons/gut/`
+- GUT — Godot Unit Test — addon dans `addons/gut/`, version 9.4 ou supérieure
 
 Aucune autre dépendance sans justification écrite dans une spec.
 
@@ -39,7 +39,7 @@ Colonnes :
 
 | N° | Feature | Design | Assets | Spec | Tests | Implémentation |
 |----|---------|--------|--------|------|-------|----------------|
-| 01 | Bootstrap projet (Godot 4 + GUT)             | design écrit | n/a    | spec écrite | tests rouges (non exécutés — godot indisponible) | implémenté (validation GUT à confirmer sur poste) |
+| 01 | Bootstrap projet (Godot 4.6 + GUT)           | design écrit | n/a    | spec écrite | tests rouges (non exécutés — godot indisponible) | implémenté (validation GUT à confirmer sur poste) |
 | 02 | Scène 3D minimale (sol + ciel + lumière + caméra fixe) | design écrit | bon de commande émis | spec écrite | tests rouges (non exécutés — godot indisponible) | implémenté (validation GUT à confirmer sur poste) |
 | 03 | Personnage joueur déplaçable (ZQSD/WASD)     | à faire | à faire | à faire | à faire | à faire |
 | 04 | Caméra troisième personne suivant le joueur  | à faire | n/a    | à faire | à faire | à faire |
@@ -50,7 +50,7 @@ Colonnes :
 
 ## Critères du prototype v0.1 jouable
 
-- [ ] Le projet Godot s'ouvre sans erreur dans l'éditeur Godot 4
+- [ ] Le projet Godot s'ouvre sans erreur dans l'éditeur Godot 4.6
 - [ ] La commande `godot --headless -s res://addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` retourne 0 (tous tests verts)
 - [ ] `godot --path . res://main.tscn` lance le jeu sans erreur dans la console
 - [ ] Le joueur voit une ville minimale en 3D (sol, ciel, bâtiments cubiques)
