@@ -26,10 +26,9 @@ fin
 4. Si un agent renvoie un blocage, on traite l'échange avant de continuer.
 5. À la fin de chaque feature, lancer :
    ```
-   npm test -- --run
-   npx tsc --noEmit
-   npm run build
+   godot --headless -s res://addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
    ```
+   et vérifier que le code retour est 0.
 
 ## Critère d'arrêt
 

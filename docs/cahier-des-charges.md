@@ -8,30 +8,29 @@ Un jeu 3D navigateur, inspiré de GTA : ville ouverte minimale, personnage à pi
 
 ## Stack imposée
 
-- Three.js (rendu)
-- cannon-es (physique)
-- TypeScript strict
-- Vite (dev / build)
-- Vitest (tests)
+- Godot 4 (moteur, rendu 3D, physique intégrée)
+- GDScript (langage)
+- GUT (Godot Unit Test) pour les tests unitaires
 
 ## État des features
 
-| N° | Feature | Design | Spec | Tests | Implémentation |
-|----|---------|--------|------|-------|----------------|
-| 01 | Bootstrap projet (Vite + TS + Vitest) | — | à faire | à faire | à faire |
-| 02 | Scène 3D minimale (sol + ciel + caméra) | à faire | à faire | à faire | à faire |
-| 03 | Personnage joueur déplaçable (ZQSD) | à faire | à faire | à faire | à faire |
-| 04 | Caméra troisième personne | à faire | à faire | à faire | à faire |
-| 05 | Ville minimale (sol + bâtiments cubiques) | à faire | à faire | à faire | à faire |
-| 06 | Voiture (mesh + physique de base) | à faire | à faire | à faire | à faire |
-| 07 | Entrer / sortir d'un véhicule (touche E) | à faire | à faire | à faire | à faire |
-| 08 | Conduite (accélérer, freiner, tourner) | à faire | à faire | à faire | à faire |
+Colonnes : `Design` couvre design doc + bon de commande graphique. `Assets` indique si le bon de commande a effectivement été matérialisé dans le projet (dossiers et placeholders créés par le developer).
+
+| N° | Feature | Design | Assets | Spec | Tests | Implémentation |
+|----|---------|--------|--------|------|-------|----------------|
+| 01 | Bootstrap projet (Godot 4 + GUT) | à faire | n/a | à faire | à faire | à faire |
+| 02 | Scène 3D minimale (sol + ciel + caméra) | à faire | à faire | à faire | à faire | à faire |
+| 03 | Personnage joueur déplaçable (ZQSD) | à faire | à faire | à faire | à faire | à faire |
+| 04 | Caméra troisième personne | à faire | n/a | à faire | à faire | à faire |
+| 05 | Ville minimale (sol + bâtiments cubiques) | à faire | à faire | à faire | à faire | à faire |
+| 06 | Voiture (mesh + physique de base) | à faire | à faire | à faire | à faire | à faire |
+| 07 | Entrer / sortir d'un véhicule (touche E) | à faire | n/a | à faire | à faire | à faire |
+| 08 | Conduite (accélérer, freiner, tourner) | à faire | n/a | à faire | à faire | à faire |
 
 ## Critères du prototype v0.1 jouable
 
-- [ ] `npm run dev` lance le jeu dans un navigateur sans erreur
-- [ ] `npm test -- --run` est vert
-- [ ] `npx tsc --noEmit` est vert
+- [ ] Le projet s'ouvre dans Godot 4 et lance `main.tscn` sans erreur
+- [ ] La commande `godot --headless -s res://addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` retourne 0 (tous tests verts)
 - [ ] Le joueur voit une ville minimale en 3D
 - [ ] Le joueur déplace son personnage au clavier
 - [ ] Le joueur peut entrer dans une voiture et la conduire
