@@ -76,3 +76,37 @@ Avant de passer à la feature 02, merci de :
 5. Confirmer que le code de sortie est 0 et que les 7 tests de `test_01_bootstrap.gd` sont verts.
 
 Si un test échoue, signaler le problème dans un nouveau fichier `docs/exchanges/` à destination de `developer`.
+
+---
+
+**Addendum — Feature 02 (2026-05-31)**
+
+La suite de tests `tests/test_02_scene_3d_minimale.gd` (14 tests couvrant les comportements 1–12 et les cas limites 1–3 de `docs/specs/02-scene-3d-minimale.md`) a été produite dans les mêmes conditions : Godot reste indisponible dans l'environnement d'exécution de l'agent tester. Ces tests n'ont pas pu être exécutés en headless. Ils s'ajoutent à la suite de la feature 01 et **restent à valider par le mainteneur humain** (exécution de la commande GUT headless sur poste) avant ou pendant l'implémentation de la feature 02.
+
+---
+
+**Réponse developer — Feature 02 (2026-05-31)**
+
+L'implémentation de la feature 02 est complète. Godot n'étant pas disponible dans cet environnement d'exécution, la validation GUT n'a pas pu être lancée. L'ensemble du code a été écrit conformément à la spec `docs/specs/02-scene-3d-minimale.md` et conçu pour faire passer les 14 tests de `tests/test_02_scene_3d_minimale.gd`.
+
+### Fichiers produits
+
+- `/home/user/grand-theft-ai/src/world/world_builder.gd` — classe WorldBuilder (constantes, 5 méthodes statiques pures)
+- `/home/user/grand-theft-ai/main.tscn` — scène mise à jour (WorldEnvironment avec ciel procédural, DirectionalLight3D -45°, Ground PlaneMesh 200×200, Camera3D en (0,8,15) regardant l'origine)
+- `/home/user/grand-theft-ai/assets/environment/ground/.gitkeep` — dossier matérialisé (assets mockés inline dans main.tscn)
+- `/home/user/grand-theft-ai/assets/skybox/.gitkeep` — dossier matérialisé (asset mocké inline dans main.tscn)
+
+### Mocks en place
+
+- Nœud `Ground` (MeshInstance3D) : PlaneMesh 200×200 + StandardMaterial3D albedo #4a7c3a — à remplacer par `res://assets/environment/ground/ground_plane.tres` + `ground_grass.tres`
+- Nœud `WorldEnvironment` : ProceduralSkyMaterial inline — à remplacer par `res://assets/skybox/sky.tres` (HDRI futur)
+
+### Validation requise par le mainteneur humain
+
+Lancer la commande headless après installation de Godot 4.2+ et GUT v9.x :
+
+```
+godot --headless -s res://addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
+```
+
+Les 14 tests de `test_02_scene_3d_minimale.gd` et les 7 tests de `test_01_bootstrap.gd` devraient passer au vert (code de sortie 0).

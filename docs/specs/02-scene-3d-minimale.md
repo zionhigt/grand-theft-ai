@@ -126,7 +126,7 @@ static func build_camera_transform() -> Transform3D:
     return t
 ```
 
-La direction attendue (forward normalisée) est `(CAMERA_LOOK_AT - CAMERA_POSITION).normalized()` = `Vector3(0, -8, -15).normalized()`.
+La direction forward attendue (normalisée) est `(CAMERA_LOOK_AT - CAMERA_POSITION).normalized()` = `Vector3(0, -8, -15).normalized()`.
 
 ## Structure des scènes (.tscn)
 
@@ -140,9 +140,9 @@ Main : Node3D                                    (nœud racine hérité de la fe
 │       background_mode = Environment.BG_SKY
 │       sky = Sky (resource inline)
 │         sky_material = ProceduralSkyMaterial (resource inline)
-│           sky_top_color    = Color(0.306, 0.627, 1.0)
+│           sky_top_color     = Color(0.306, 0.627, 1.0)
 │           sky_horizon_color = Color(0.753, 0.847, 1.0)
-│           ground_bottom_color = Color(0.290, 0.486, 0.227)
+│           ground_bottom_color  = Color(0.290, 0.486, 0.227)
 │           ground_horizon_color = Color(0.290, 0.486, 0.227)
 │           sky_energy_multiplier = 1.0
 │           sun_angle_max = 30.0
@@ -181,7 +181,7 @@ Notes de structure :
 - Tous les nœuds enfants sont placés directement sous `Main` (pas de sous-groupage).
 - L'ordre des enfants dans l'arbre : `WorldEnvironment`, `DirectionalLight3D`, `Ground`, `Camera3D`.
 - Les ressources `Environment`, `Sky`, `ProceduralSkyMaterial`, `PlaneMesh`, `StandardMaterial3D` sont toutes **inline** (pas de fichiers `.tres` séparés à ce stade).
-- `WorldEnvironment` n'a pas de nœud enfant — l'`Environment` est une propriété de ressource, pas un nœud fils.
+- `WorldEnvironment` n'a pas de nœud enfant : l'`Environment` est une propriété de ressource, pas un nœud fils.
 - La `Camera3D` ne porte aucun script. Son orientation est configurée statiquement via l'éditeur Godot (propriété `transform`) en appliquant `look_at(Vector3(0,0,0))`.
 
 ## Données et constantes
@@ -190,11 +190,11 @@ Toutes les constantes sont déclarées dans `src/world/world_builder.gd` et acce
 
 | Constante | Type | Valeur | Rôle |
 |---|---|---|---|
-| `GROUND_SIZE` | `float` | `200.0` | Demi-côté du plan de sol (passé à `PlaneMesh.size`) |
+| `GROUND_SIZE` | `float` | `200.0` | Côté du plan de sol passé à `PlaneMesh.size` (200 × 200 m) |
 | `SKY_TOP_COLOR` | `Color` | `Color(0.306, 0.627, 1.0)` | Couleur zénith du ciel procédural (#4ea0ff) |
 | `SKY_HORIZON_COLOR` | `Color` | `Color(0.753, 0.847, 1.0)` | Couleur horizon du ciel (#c0d8ff) |
-| `SKY_GROUND_COLOR` | `Color` | `Color(0.290, 0.486, 0.227)` | Couleur sol du ciel et albedo du sol (#4a7c3a) |
-| `GROUND_ALBEDO` | `Color` | `Color(0.290, 0.486, 0.227)` | Couleur du matériau sol (#4a7c3a) |
+| `SKY_GROUND_COLOR` | `Color` | `Color(0.290, 0.486, 0.227)` | Couleur sous l'horizon du ciel, cohérente avec le sol (#4a7c3a) |
+| `GROUND_ALBEDO` | `Color` | `Color(0.290, 0.486, 0.227)` | Couleur albedo du matériau sol (#4a7c3a) |
 | `LIGHT_PITCH_RADIANS` | `float` | `-PI / 4.0` | Rotation X de la lumière directionnelle (-45°) |
 | `CAMERA_POSITION` | `Vector3` | `Vector3(0.0, 8.0, 15.0)` | Position de la caméra fixe |
 | `CAMERA_LOOK_AT` | `Vector3` | `Vector3(0.0, 0.0, 0.0)` | Point cible du regard de la caméra |
@@ -207,11 +207,11 @@ Chaque point est testable unitairement avec GUT dans `tests/test_02_scene_3d_min
 
 1. `WorldBuilder.GROUND_SIZE == 200.0` — la constante est égale à exactement `200.0`.
 
-2. `WorldBuilder.build_ground_mesh()` retourne un objet dont `get_class() == "PlaneMesh"` et dont `size == Vector2(200.0, 200.0)`.
+2. `WorldBuilder.build_ground_mesh()` retourne un `PlaneMesh` (`mesh is PlaneMesh == true`) dont `size == Vector2(200.0, 200.0)`.
 
-3. `WorldBuilder.build_ground_material()` retourne un objet dont `get_class() == "StandardMaterial3D"` et dont chaque composant de `albedo_color` est approximativement égal à `Color(0.290, 0.486, 0.227)` (tolérance `0.001` par composant avec `assert_almost_eq`).
+3. `WorldBuilder.build_ground_material()` retourne un `StandardMaterial3D` dont chaque composant de `albedo_color` est approximativement égal à `Color(0.290, 0.486, 0.227)` (tolérance `0.001` par composant, asserté avec `assert_almost_eq`).
 
-4. `WorldBuilder.build_sky_material()` retourne un objet dont `get_class() == "ProceduralSkyMaterial"` et dont `sky_top_color` est approximativement `Color(0.306, 0.627, 1.0)` (tolérance `0.001` par composant).
+4. `WorldBuilder.build_sky_material()` retourne un `ProceduralSkyMaterial` dont `sky_top_color` est approximativement `Color(0.306, 0.627, 1.0)` (tolérance `0.001` par composant).
 
 5. `WorldBuilder.build_sky_material().sky_horizon_color` est approximativement `Color(0.753, 0.847, 1.0)` (tolérance `0.001` par composant).
 
@@ -221,19 +221,19 @@ Chaque point est testable unitairement avec GUT dans `tests/test_02_scene_3d_min
 
 8. La direction "forward" de `WorldBuilder.build_camera_transform()` pointe vers l'origine : le vecteur `-basis.z` du transform retourné a un produit scalaire `> 0.99` avec `(Vector3(0,0,0) - Vector3(0,8,15)).normalized()` = `Vector3(0, -8, -15).normalized()`.
 
+   Test par produit scalaire : `(-transform.basis.z).dot(expected_forward) > 0.99`.
+
 9. `WorldBuilder.build_directional_light_basis().get_euler().x` est approximativement `-PI/4` (tolérance `0.001`).
 
-10. **Test de scène headless** : charger `load("res://main.tscn")`, appeler `add_child_autofree(scene)`, et vérifier que les quatre enfants nommés `WorldEnvironment`, `DirectionalLight3D`, `Ground`, `Camera3D` existent (via `scene.get_node_or_null("WorldEnvironment") != null`, etc.), et que `scene.get_node("Camera3D").current == true`.
+10. **Test de scène headless** : charger `load("res://main.tscn")`, appeler `add_child_autofree(scene)`, et vérifier que les quatre enfants nommés `WorldEnvironment`, `DirectionalLight3D`, `Ground`, `Camera3D` existent (`scene.get_node_or_null("WorldEnvironment") != null`, etc.), et que `scene.get_node("Camera3D").current == true`.
 
 11. Le nœud `Ground` (MeshInstance3D) a un `mesh` de classe `PlaneMesh` (`ground.mesh is PlaneMesh == true`) avec `ground.mesh.size == Vector2(200.0, 200.0)`.
 
-12. `scene.get_node("WorldEnvironment").environment.background_mode == Environment.BG_SKY`, `environment.sky != null`, et `environment.sky.sky_material is ProceduralSkyMaterial == true`.
-
-13. `scene.get_node("DirectionalLight3D").light_energy == 1.0`.
+12. `scene.get_node("WorldEnvironment").environment.background_mode == Environment.BG_SKY`, `environment.sky != null`, et `environment.sky.sky_material is ProceduralSkyMaterial == true`. De plus, `scene.get_node("DirectionalLight3D").light_energy == 1.0`.
 
 ## Cas limites / erreurs
 
-1. **Instances distinctes** : deux appels successifs à `WorldBuilder.build_ground_mesh()` retournent deux instances dont l'identité est différente (`mesh_a != mesh_b`, i.e. `is_same(mesh_a, mesh_b) == false`). La méthode ne cache pas de singleton de ressource.
+1. **Instances distinctes (mesh)** : deux appels successifs à `WorldBuilder.build_ground_mesh()` retournent deux instances dont l'identité est différente (`is_same(mesh_a, mesh_b) == false`). La méthode ne cache pas de singleton de ressource.
 
 2. **Instances distinctes (matériau)** : deux appels successifs à `WorldBuilder.build_ground_material()` retournent deux instances dont `is_same(mat_a, mat_b) == false`.
 
@@ -241,7 +241,7 @@ Chaque point est testable unitairement avec GUT dans `tests/test_02_scene_3d_min
 
 4. **Stabilité de la basis lumière** : deux appels successifs à `WorldBuilder.build_directional_light_basis()` retournent des bases vérifiant `b1.is_equal_approx(b2) == true`.
 
-5. **Aucun crash en headless** : l'instanciation de `WorldBuilder` (même si inutile car méthodes statiques) ne produit aucune erreur — `WorldBuilder` étend `RefCounted`, pas de dépendance au moteur de rendu dans son constructeur implicite.
+5. **Aucun crash en headless** : `WorldBuilder` étend `RefCounted`, aucune dépendance au moteur de rendu dans son constructeur implicite — instanciable depuis un test headless sans scène active.
 
 ## Inputs Godot (Input Map)
 
@@ -252,28 +252,28 @@ Aucun ajout pour cette feature. La section `[input]` de `project.godot` reste in
 | Chemin `res://` | Mock attendu | Type mock | Usage dans la scène |
 |---|---|---|---|
 | `res://assets/environment/ground/ground_plane.tres` | oui | `PlaneMesh` inline sur le nœud `Ground` | Géométrie du sol 200 × 200 m |
-| `res://assets/environment/ground/ground_grass.tres` | oui | `StandardMaterial3D` inline (material_override du nœud `Ground`) | Couleur du sol #4a7c3a |
+| `res://assets/environment/ground/ground_grass.tres` | oui | `StandardMaterial3D` inline (`material_override` du nœud `Ground`) | Couleur albedo du sol #4a7c3a |
 | `res://assets/skybox/sky.tres` | oui | `Sky` + `ProceduralSkyMaterial` inline dans la propriété `environment` du nœud `WorldEnvironment` | Ciel procédural dégradé bleu |
 
 Tous les assets sont mockés inline dans `main.tscn`. Aucun fichier `.tres` externe n'est requis pour que la scène se lance.
 
 ## Dépendances
 
-- **Spec 01 — Bootstrap projet** : fournit `main.tscn` (nœud racine `Main`, `Camera3D`, `WorldEnvironment`) et `project.godot` valide. Cette spec 02 est une modification incrémentale de la scène issue de la spec 01.
+- **Spec 01 — Bootstrap projet** (`docs/specs/01-bootstrap.md`) : fournit `main.tscn` (nœud racine `Main`, `Camera3D`, `WorldEnvironment`) et `project.godot` valide. Cette spec 02 est une modification incrémentale de la scène issue de la spec 01.
 - **`addons/gut/`** : addon GUT v9.x ou supérieur, compatible Godot 4. Déjà installé depuis la feature 01.
 - Aucun autre addon autorisé.
 
 ## Critères d'acceptation
 
-- [ ] Le fichier `src/world/world_builder.gd` est présent, la `class_name WorldBuilder` est reconnue par GDScript sans erreur de parse.
+- [ ] Le fichier `src/world/world_builder.gd` est présent, `class_name WorldBuilder` est reconnue par GDScript sans erreur de parse.
 - [ ] La commande `godot --headless -s res://addons/gut/gut_cmdln.gd -gdir=res://tests -gexit` retourne le code de sortie 0 (tous les tests de `test_02_scene_3d_minimale.gd` passent au vert).
 - [ ] `main.tscn` s'ouvre dans l'éditeur Godot 4 sans warning rouge ni erreur de ressource manquante.
 - [ ] L'arbre de la scène dans l'éditeur affiche exactement : `Main > WorldEnvironment`, `Main > DirectionalLight3D`, `Main > Ground`, `Main > Camera3D`.
 - [ ] `godot --path . res://main.tscn` se lance sans `ERROR:` ni `SCRIPT ERROR:` dans la console.
-- [ ] Visuellement au lancement : ciel dégradé bleu (zénith soutenu → horizon pâle), sol vert sombre continu, lumière directionnelle éclairant le sol (pas de teinte plate uniforme), horizon visible dans le cadre depuis la position caméra `Vector3(0, 8, 15)`.
+- [ ] Visuellement au lancement : ciel dégradé bleu (zénith soutenu vers horizon pâle), sol vert sombre continu, lumière directionnelle éclairant le sol (pas de teinte plate uniforme), horizon visible dans le cadre depuis la position caméra `Vector3(0, 8, 15)`.
 - [ ] Le nœud `Ground` porte le commentaire `# MOCK — à remplacer par res://assets/environment/ground/ground_plane.tres + ground_grass.tres` dans la scène ou dans le script d'initialisation.
 - [ ] Le nœud `WorldEnvironment` (ou son `sky_material`) porte le commentaire `# MOCK — à remplacer par res://assets/skybox/sky.tres (HDRI futur)`.
-- [ ] Les 13 comportements attendus de la section "Comportements attendus" passent tous au vert dans GUT.
+- [ ] Les 12 comportements attendus et les 5 cas limites de la spec passent tous au vert dans GUT.
 
 ## Hors-périmètre
 

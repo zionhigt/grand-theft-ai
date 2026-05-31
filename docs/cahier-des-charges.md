@@ -40,7 +40,7 @@ Colonnes :
 | N° | Feature | Design | Assets | Spec | Tests | Implémentation |
 |----|---------|--------|--------|------|-------|----------------|
 | 01 | Bootstrap projet (Godot 4 + GUT)             | design écrit | n/a    | spec écrite | tests rouges (non exécutés — godot indisponible) | implémenté (validation GUT à confirmer sur poste) |
-| 02 | Scène 3D minimale (sol + ciel + lumière + caméra fixe) | design écrit | bon de commande émis | spec écrite | à faire | à faire |
+| 02 | Scène 3D minimale (sol + ciel + lumière + caméra fixe) | design écrit | bon de commande émis | spec écrite | tests rouges (non exécutés — godot indisponible) | implémenté (validation GUT à confirmer sur poste) |
 | 03 | Personnage joueur déplaçable (ZQSD/WASD)     | à faire | à faire | à faire | à faire | à faire |
 | 04 | Caméra troisième personne suivant le joueur  | à faire | n/a    | à faire | à faire | à faire |
 | 05 | Ville minimale (sol étendu + bâtiments cubiques) | à faire | à faire | à faire | à faire | à faire |
