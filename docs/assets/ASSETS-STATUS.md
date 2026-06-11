@@ -106,18 +106,11 @@ Notes de conversion :
 
 ---
 
-## Fichiers résidus dans assets/import/ (signalement — non supprimés)
+## Fichiers résidus dans assets/import/ — nettoyés (reset v2, 2026-06-11)
 
-Les fichiers suivants sont présents dans `assets/import/` mais ne correspondent à aucun GLB ou FBX en attente de traitement. Ils sont des sous-produits des conversions précédentes. L'utilisateur décide de leur sort.
+Les résidus de conversion signalés ici (dossiers `*.fbm/`, PNG/JPG orphelins, `assimp605/`, zips) ont été supprimés lors du reset v2. **Aucun GLB ni FBX original n'a été touché** : les GLB sont en place dans `assets/`, les FBX originaux archivés dans `assets/import/processed/` (ignoré par git), et une copie de sécurité complète existe dans `C:\Users\larch\gta-assets-backup\`.
 
-| Fichier | Nature | Raison |
-|---------|--------|--------|
-| `assets/import/player_body.fbm/` | Dossier de textures extrait par FBX2glTF | Résidu de conversion player_body.fbx |
-| `assets/import/player_idle.fbm/` | Dossier de textures extrait par FBX2glTF | Résidu de conversion player_idle.fbx |
-| `assets/import/player_walk.fbm/` | Dossier de textures extrait par FBX2glTF | Résidu de conversion player_walk.fbx |
-| `assets/import/player_walk.fbx.import` | Fichier .import Godot | Résidu de l'import Godot du FBX maintenant archivé |
-| `assets/import/player_walk_0.png` ... `player_walk_9.png` | Textures PNG extraites | Résidu de conversion player_walk.fbx — non declarées dans un bon de commande |
-| `assets/import/wheel_0.jpg` | Texture JPG associée a wheel.glb | Déclarée ni dans 06-voiture.md ni dans aucun bon de commande actif pour assets/import/. Conserver ou supprimer manuellement. |
+Note reset v2 : les bons de commande `docs/assets/NN-*.md` référencés dans ce registre ont été supprimés du working tree — ils restent consultables dans l'historique git (commit `4dd3f71`, snapshot avant reset).
 
 ---
 
