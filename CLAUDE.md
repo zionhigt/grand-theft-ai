@@ -1,65 +1,76 @@
 # Grand Theft AI — v2
 
-Jeu TPS 3D desktop inspiré de GTA, sous **Godot 4.6**, en GDScript.
+Jeu TPS 3D desktop inspiré de GTA, sous **Godot 4.6**, en GDScript. Le prototype v1 est archivé dans l'historique git (commit `4dd3f71`).
 
-**Reset v2 le 2026-06-11.** Le prototype v1 (20 features, pipeline 4 agents) est archivé dans l'historique git — commit `4dd3f71` « snapshot complet avant reset v2 ». Le code repart de zéro ; seuls le bootstrap Godot et les assets sont conservés.
+**Principe fondateur : rien n'est « fini » tant que le jeu n'a pas été lancé réellement.** La validation se fait en jouant — les tests verts sont un prérequis, jamais une preuve.
+
+## Documents maîtres
+
+| Document | Rôle | Tenu par |
+|----------|------|----------|
+| `GDD.md` | le jeu en une page (vision, contrôles, jalon v0.1) | session principale |
+| `ARCHITECTURE.md` | carte du code — à jour à chaque commit touchant `src/`/`scenes/` | session principale |
+| `BACKLOG.md` | itérations priorisées + bugs — source de vérité de l'avancement | session principale |
+| `docs/assets/PLAN-LIVRAISON.md` | contrat de livraison des assets (négocié avec l'utilisateur) | agent `asset-director` |
+| `docs/assets/ASSETS-STATUS.md` | état réel des fichiers d'assets sur disque | agent `mixamo` |
 
 ## Stack
 
 - **Godot 4.6.2** — binaire : `C:\Users\larch\godot\Godot_v4.6.2-stable_win64_console.exe` (Bash : `/c/Users/larch/godot/Godot_v4.6.2-stable_win64_console.exe`)
 - **GDScript** uniquement (scripts `.gd`, scènes `.tscn`)
-- **GUT v9.6** dans `addons/gut/` (tests headless)
+- **GUT v9.6** dans `addons/gut/` (smoke tests headless)
 
 ## Commandes
 
 ```bash
-# Lancer le jeu
+# Lancer le jeu (validation réelle — obligatoire avant de livrer)
 /c/Users/larch/godot/Godot_v4.6.2-stable_win64_console.exe --path . res://main.tscn
 
-# Tests GUT headless (code de sortie 0 = tout vert)
+# Boot headless rapide (zéro erreur console attendu)
+/c/Users/larch/godot/Godot_v4.6.2-stable_win64_console.exe --headless --path . --quit-after 3
+
+# Suite de tests (code de sortie 0 = vert)
 /c/Users/larch/godot/Godot_v4.6.2-stable_win64_console.exe --headless -s res://addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
 ```
 
-## Structure
+## La boucle de développement
 
-```
-.
-├── project.godot         # projet Godot 4.6 (input map ZQSD/WASD + interact + drive_* déjà déclarée)
-├── main.tscn             # scène d'entrée (vide pour l'instant)
-├── src/                  # scripts GDScript (à créer)
-├── scenes/               # scènes .tscn (à créer)
-├── tests/                # tests GUT (à créer)
-├── assets/               # assets binaires conservés du v1
-│   └── import/           # dépôt FBX Mixamo + outil FBX2glTF
-├── docs/assets/ASSETS-STATUS.md  # registre des assets (tenu par l'agent mixamo)
-└── .claude/agents/       # configurations des agents
-```
+L'implémentation n'est **pas déléguée à un sous-agent** : la session principale Claude code, teste et lance le jeu elle-même. Une itération :
 
-## Assets disponibles (capital conservé du v1)
+1. **Choisir** l'entrée `BACKLOG.md` la plus prioritaire (l'utilisateur arbitre).
+2. **Mini-spec** : remplir le modèle en bas du backlog (comportement, critère jouable, tests smoke) — 15 lignes max.
+3. **Implémenter** dans `src/` + `scenes/` — nœuds natifs d'abord (`CharacterBody3D`, `SpringArm3D`, `VehicleBody3D`), mock-first pour tout visuel.
+4. **Tests smoke** dans `tests/` (GUT) : boot, instanciation des scènes, logique d'état critique. Suite complète verte. Rappel headless : `Input.set_mouse_mode()` est un no-op — tester les flags internes, jamais le mode souris.
+5. **Lancer le jeu réellement** et lire la console — zéro erreur, comportement constaté.
+6. **Agent `reviewer`** → corriger tous les findings bloquants/importants.
+7. **Mettre à jour** `ARCHITECTURE.md` + `BACKLOG.md`, puis **commit** (un commit par itération minimum).
+8. **Playtest utilisateur** (~5 min, critère jouable de la mini-spec). Son feedback en mots simples → bugs dans `BACKLOG.md`, corrigés sur place à l'itération suivante. Un bug ne devient jamais une feature.
 
-Registre complet : `docs/assets/ASSETS-STATUS.md`. En résumé :
+## Règles de code
 
-| Asset | Chemin | Contenu |
-|-------|--------|---------|
-| Personnage | `assets/characters/player/player_body.glb` | mesh humanoïde Mixamo (Ch08) + textures PNG |
-| Animations | `player_idle.glb`, `player_walk.glb`, `player_car_drive.glb`, `player_car_enter.glb`, `player_car_exit.glb` | clips Mixamo (les `car_*` sont Without Skin, squelette seul) |
-| Voiture | `assets/vehicles/car/car_body.glb` | carrosserie complète |
+1. ≤ 150 lignes par script, un concept par fichier, noms et commentaires en **français**.
+2. **Call down, signal up** — jamais de `get_parent()` pour appeler vers le haut.
+3. Pas de code mort : un fichier que rien ne référence est supprimé.
+4. Aucun `load`/`preload`/`ExtResource` vers un chemin inexistant.
+5. Détail des structures et machines à états : voir `ARCHITECTURE.md`.
 
-## Workflow d'import Mixamo (inchangé, agent `mixamo`)
+## Assets au fil de l'eau
 
-1. Télécharger le FBX sur [mixamo.com](https://www.mixamo.com), le nommer **exactement** comme le GLB attendu (même nom, extension `.fbx`), le déposer dans `assets/import/`.
-2. Invoquer l'agent `mixamo` : il convertit avec **FBX2glTF** (`assets/import/FBX2glTF/FBX2glTF-windows-x86_64/FBX2glTF-windows-x86_64.exe --input <in.fbx> --output <sortie_sans_ext> --binary`), place le GLB, archive le FBX dans `assets/import/processed/` et met à jour le registre.
-3. **Jamais assimp** — il ne supporte pas le format FBX de Mixamo.
+Les assets arrivent progressivement — le développement ne les attend **jamais** :
 
-## Pipeline de développement
+1. **Mock d'abord** : tout visuel sans asset livré est une primitive Godot (BoxMesh, CapsuleMesh…) avec dimensions/couleur fixées et un commentaire `# MOCK — à remplacer par res://assets/...`. Le jeu est toujours lançable.
+2. **Négociation** : l'utilisateur discute avec l'agent `asset-director` du meilleur compromis (mock / pack CC0 / Mixamo) — résultat dans `PLAN-LIVRAISON.md` avec nom de fichier exact, source et réglages d'export.
+3. **Livraison** : l'utilisateur dépose le fichier dans `assets/import/` (nommé exactement comme le GLB attendu) et invoque l'agent `mixamo`, qui convertit (FBX2glTF — **jamais assimp**) et met à jour `ASSETS-STATUS.md`.
+4. **Intégration** : au début de chaque itération, consulter `ASSETS-STATUS.md` — tout GLB nouvellement livré dont le mock existe est intégré **par code** (`load()` dans `_ready()`) dans cette itération. L'utilisateur n'ouvre jamais l'éditeur Godot pour finir une intégration.
 
-**En cours de redéfinition** (prochaine étape du reset). Principes actés :
+Sauvegarde des assets hors dépôt : `C:\Users\larch\gta-assets-backup\` (ne jamais y toucher).
 
-1. **Rien n'est « fini » tant que le jeu n'a pas été lancé réellement** — la validation se fait en jouant, pas seulement aux tests verts.
-2. Boucle courte : mini-spec → implémentation → smoke tests → lancement du jeu → playtest utilisateur.
-3. `ARCHITECTURE.md` (à créer avec le premier code) est la carte du projet : chaque fichier y est décrit en une ligne ; « call down, signal up » pour la communication entre nœuds.
-4. Un bug se corrige sur place — il ne devient jamais une « feature ».
-5. Code lisible avant tout : ~150 lignes max par script, un concept par fichier, commentaires en français.
-6. Utiliser les nœuds Godot natifs : `CharacterBody3D` (joueur), `SpringArm3D` (caméra), `VehicleBody3D` (voiture) — ne pas réimplémenter ce que le moteur fournit.
+## Agents
 
-⚠️ Les agents `.claude/agents/` designer / specifier / tester / developer décrivent le pipeline v1 et ne doivent **plus être invoqués** tant qu'ils n'ont pas été réécrits. Seul `mixamo` reste valide.
+| Agent | Rôle | Quand l'invoquer |
+|-------|------|-------------------|
+| `asset-director` | négocie le plan de livraison des assets, propose des options graduées (effort/rendu), spécifie les mocks | quand une itération à venir a besoin d'assets, ou à la demande de l'utilisateur |
+| `mixamo` | convertit/place les fichiers déposés dans `assets/import/`, tient `ASSETS-STATUS.md` | quand l'utilisateur a déposé des fichiers |
+| `reviewer` | revue de conformité (architecture, lisibilité, intégrité des ressources), lecture seule | fin de chaque itération, avant commit |
+
+Pas d'autre agent : concevoir, spécifier, coder et tester se font en session principale, au plus près du jeu qui tourne.
