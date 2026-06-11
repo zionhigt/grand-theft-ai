@@ -1,4 +1,4 @@
-# Design 01 — Bootstrap projet (Godot 4.6 + GUT)
+﻿# Design 01 — Bootstrap projet (Godot 4.6 + GUT)
 
 ## Pitch (1 phrase)
 

@@ -1,4 +1,4 @@
-# Échanges inter-agents
+﻿# Échanges inter-agents
 
 Tout message d'un agent à un autre (question, blocage, désaccord, demande de clarification) prend la forme d'un fichier markdown dans ce dossier. Pas de question en l'air, tout est tracé.
 

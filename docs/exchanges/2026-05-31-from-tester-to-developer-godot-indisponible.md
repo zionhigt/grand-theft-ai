@@ -1,4 +1,4 @@
-# Godot indisponible dans l'environnement d'exécution — validation des tests impossible
+﻿# Godot indisponible dans l'environnement d'exécution — validation des tests impossible
 
 **De** : tester
 **À** : developer

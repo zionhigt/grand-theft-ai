@@ -1,4 +1,4 @@
-# Spec 01 — Bootstrap projet (Godot 4.6 + GUT)
+﻿# Spec 01 — Bootstrap projet (Godot 4.6 + GUT)
 
 ## Contexte
 

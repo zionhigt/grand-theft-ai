@@ -1,4 +1,4 @@
-# Design 02 — Scène 3D minimale (sol + ciel + lumière + caméra fixe)
+﻿# Design 02 — Scène 3D minimale (sol + ciel + lumière + caméra fixe)
 
 ## Pitch (1 phrase)
 

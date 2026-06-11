@@ -121,10 +121,12 @@ func test_main_tscn_contient_les_noeuds_attendus() -> void:
 		"Le nœud DirectionalLight3D doit exister")
 	assert_not_null(scene.get_node_or_null("Ground"),
 		"Le nœud Ground doit exister")
-	assert_not_null(scene.get_node_or_null("Camera3D"),
-		"Le nœud Camera3D doit exister")
-	assert_true(scene.get_node("Camera3D").current,
-		"La Camera3D doit être active (current == true)")
+	# La feature 04 a supprimé la Camera3D fixe enfant direct de Main
+	# et l'a remplacée par CameraRig/Camera3D — on vérifie la nouvelle structure.
+	assert_not_null(scene.get_node_or_null("CameraRig/Camera3D"),
+		"Le nœud CameraRig/Camera3D doit exister")
+	assert_true(scene.get_node("CameraRig/Camera3D").current,
+		"La Camera3D de CameraRig doit être active (current == true)")
 
 # ---------------------------------------------------------------------------
 # Comportement 11 — nœud Ground est un PlaneMesh 200×200

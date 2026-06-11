@@ -1,4 +1,4 @@
-# Cahier des charges — Grand Theft AI
+﻿# Cahier des charges — Grand Theft AI
 
 Document maître, vivant. Source de vérité unique de l'état du projet. Chaque agent met à jour la ou les colonnes qui le concernent à la fin de son tour.
 
@@ -39,14 +39,26 @@ Colonnes :
 
 | N° | Feature | Design | Assets | Spec | Tests | Implémentation |
 |----|---------|--------|--------|------|-------|----------------|
-| 01 | Bootstrap projet (Godot 4.6 + GUT)           | design écrit | n/a    | spec écrite | tests rouges (non exécutés — godot indisponible) | implémenté (validation GUT à confirmer sur poste) |
-| 02 | Scène 3D minimale (sol + ciel + lumière + caméra fixe) | design écrit | bon de commande émis | spec écrite | tests rouges (non exécutés — godot indisponible) | implémenté (validation GUT à confirmer sur poste) |
-| 03 | Personnage joueur déplaçable (ZQSD/WASD)     | à faire | à faire | à faire | à faire | à faire |
-| 04 | Caméra troisième personne suivant le joueur  | à faire | n/a    | à faire | à faire | à faire |
-| 05 | Ville minimale (sol étendu + bâtiments cubiques) | à faire | à faire | à faire | à faire | à faire |
-| 06 | Voiture (mesh + corps physique de base)      | à faire | à faire | à faire | à faire | à faire |
-| 07 | Entrer / sortir d'un véhicule (touche E)     | à faire | n/a    | à faire | à faire | à faire |
-| 08 | Conduite (accélérer, freiner, tourner)       | à faire | n/a    | à faire | à faire | à faire |
+| 01 | Bootstrap projet (Godot 4.6 + GUT)           | design écrit | n/a    | spec écrite | tests rouges | implémenté |
+| 02 | Scène 3D minimale (sol + ciel + lumière + caméra fixe) | design écrit | bon de commande émis | spec écrite | tests rouges | implémenté |
+| 03 | Personnage joueur déplaçable (ZQSD/WASD)     | design écrit | bon de commande émis | spec écrite | tests rouges | implémenté |
+| 04 | Caméra troisième personne suivant le joueur  | design écrit | n/a    | spec écrite | tests rouges | implémenté (résolution `target` garantie via `_ready()`) |
+| 05 | Ville minimale (sol étendu + bâtiments cubiques) | design écrit | bon de commande émis | spec écrite | tests rouges | implémenté |
+| 06 | Voiture (mesh + corps physique de base) — **supersédée par F18**      | design écrit | bon de commande émis | spec écrite | tests rouges | implémenté (Bug B résolu : GLB enfant de CarBodyMesh ; auto-scale AABB → 4.0 m, scale uniforme ; ROUE_ROT résolu : instance GLB roue rotation_degrees.z = 90°) |
+| 07 | Entrer / sortir d'un véhicule (touche E) — **supersédée par F18**     | design écrit | bon de commande émis | spec écrite | tests rouges | implémenté |
+| 08 | Conduite (accélérer, freiner, tourner) — **supersédée par F18**       | design écrit | n/a    | spec écrite | tests rouges | implémenté |
+| 09 | Caméra orbitale (rotation souris + zoom)     | design écrit | n/a    | spec écrite | tests rouges | implémenté (ZOOM_DISTANCES=[3.0, 4.5, 6.708]) |
+| 10 | Personnage 3D Mixamo (remplacement mock capsule) | design écrit | bon de commande émis | spec écrite | tests rouges | implémenté (Bug A résolu : zeroing X/Z tous tracks TYPE_POSITION_3D) |
+| 11 | Alignement personnage-caméra (clic droit, axe horizontal) | design écrit | n/a | spec écrite | tests rouges | implémenté |
+| 12 | Déplacement camera-relatif (ZQSD orienté caméra)          | design écrit | n/a    | spec écrite | tests rouges | implémenté |
+| 13 | Intégration carrosserie GLB propre (masquage roues redondantes) — **supersédée par F18** | design écrit | bon de commande émis | spec écrite | tests rouges | implémenté |
+| 14 | Calibration physique véhicule (spawn sol + suspension + moteur) — **supersédée par F18** | design écrit | n/a | spec écrite | tests rouges | implémenté |
+| 15 | Correction géométrie roues VehicleBody3D (empattement axe Z) — **supersédée par F18** | design écrit | n/a | spec écrite | tests rouges | implémenté |
+| 16 | Suppression des WheelMesh fantômes (roues CylinderMesh dépréciées) — **supersédée par F18** | design écrit | bon de commande émis | spec écrite | tests rouges | implémenté |
+| 17 | Corrections véhicule : orientation GLB, vitesse moteur, frein — **supersédée par F18**      | design écrit | n/a                  | spec écrite | tests rouges | implémenté |
+| 18 | Refonte complète du véhicule (supersède 06, 07, 08, 13–17)         | design écrit | bon de commande émis | spec écrite | tests rouges  | implémenté |
+| 19 | Animations véhicule (entrer / conduire / sortir)                    | design écrit | bon de commande émis | spec écrite | tests rouges  | à faire    |
+| 20 | Refonte caméra TPS standard (spring-back + suppression reset molette) | design écrit | bon de commande émis | spec écrite | à faire       | à faire    |
 
 ## Critères du prototype v0.1 jouable
 

@@ -1,4 +1,4 @@
-# Spec 02 — Scène 3D minimale (sol + ciel + lumière + caméra fixe)
+﻿# Spec 02 — Scène 3D minimale (sol + ciel + lumière + caméra fixe)
 
 ## Contexte
 

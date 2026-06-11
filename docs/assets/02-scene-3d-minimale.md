@@ -1,4 +1,4 @@
-# Bon de commande 02 — Scène 3D minimale (sol + ciel + lumière + caméra fixe)
+﻿# Bon de commande 02 — Scène 3D minimale (sol + ciel + lumière + caméra fixe)
 
 ## Résumé
 

@@ -18,11 +18,12 @@ Tu es la première étape du pipeline. Sans tes deux livrables, le specifier ne 
 
 ## Règles
 
-1. Tu n'écris **que** dans `docs/design/`, `docs/assets/`, et éventuellement `docs/exchanges/`. Tu ne touches jamais à `src/`, `tests/`, `scenes/`, `docs/specs/`, ni à `assets/` directement.
+1. Tu n'écris **que** dans `docs/design/`, `docs/assets/`, dans les colonnes **Design** et **Assets** de `docs/cahier-des-charges.md`, et éventuellement dans `docs/exchanges/`. Tu ne touches jamais à `src/`, `tests/`, `scenes/`, `docs/specs/`, ni à `assets/` directement. Tu ne modifies jamais `docs/assets/ASSETS-STATUS.md` (registre tenu par l'agent `mixamo`, lecture seule pour toi).
 2. Lis avant tout :
    - `CLAUDE.md`,
    - `docs/cahier-des-charges.md`,
-   - les bons de commande déjà émis dans `docs/assets/` pour respecter l'arborescence existante.
+   - `docs/assets/ASSETS-STATUS.md` — pour savoir quels assets sont **déjà livrés** : ne re-commande jamais un asset existant, référence-le,
+   - les bons de commande déjà émis dans `docs/assets/` pour respecter l'arborescence existante — en ignorant ceux des features marquées **« supersédée par FNN »** dans le cahier des charges (seul le bon de commande de la feature remplaçante fait foi).
 3. Reste fidèle à la référence GTA (vue 3e personne, ville ouverte, voitures, action) mais **minimal** : on vise un prototype jouable, pas un AAA. Les primitives Godot sont la norme pour le proto.
 4. Cohérence d'arborescence : si un dossier existe déjà sous `assets/...` (déclaré par un bon de commande précédent), réutilise-le. Sinon, déclare-le explicitement dans le bon de commande de ta feature.
 5. Si le game design d'une autre feature dont tu dépends n'existe pas encore, signale-le et arrête-toi (ouvre un fichier dans `docs/exchanges/`).
@@ -84,6 +85,20 @@ Pour chaque asset marqué "Livré ? = non" ci-dessus, définis un mock concret i
 
 Règle : **aucun chemin d'asset listé ci-dessus ne doit pointer dans le vide une fois la feature implémentée**. Soit l'asset final est livré, soit le mock primitif est en place au même chemin logique dans la scène.
 
+**Règle d'intégration :** les assets sont commandés pour être utilisés **par du code**, pas par l'éditeur Godot. Le bon de commande doit fournir assez d'informations (structure interne du GLB, noms de nœuds attendus, noms des clips d'animation) pour que le `developer` puisse écrire le code d'intégration sans ouvrir l'éditeur. Précise notamment : le nom du nœud racine du GLB, les nœuds enfants clés (AnimationPlayer, Skeleton3D), les noms des animations embarquées.
+
+## Section Mixamo — Instructions de téléchargement
+
+**À inclure pour chaque asset 3D d'origine Mixamo (mesh, animation).** Cette section est destinée à l'utilisateur et à l'agent `mixamo`. Omettre si la feature ne commande aucun asset Mixamo.
+
+| Nom du fichier GLB attendu | Nom du FBX à déposer | Catégorie Mixamo | Termes de recherche | Réglages export | Description |
+|----------------------------|----------------------|-------------------|---------------------|-----------------|-------------|
+| `player_idle.glb` | `player_idle.fbx` | Animations > Idle | "idle", "breathing idle" | With Skin, FBX Binary, 30 FPS, In Place si disponible | Animation idle debout |
+| `player_walk.glb` | `player_walk.fbx` | Animations > Walking | "standard walk" | With Skin, FBX Binary, 30 FPS, In Place | Animation marche avant |
+| `player_body.glb` | `player_body.fbx` | Characters | (choisir un personnage humanoïde) | With Skin, FBX Binary, T-Pose | Mesh du personnage sans animation |
+
+Règle de nommage obligatoire : le FBX déposé dans `assets/import/` doit porter **exactement le même nom** que le GLB attendu (même nom, extension `.fbx`).
+
 ## Hors-périmètre
 (assets que cette feature ne fournit pas et qui restent à commander plus tard)
 ```
@@ -113,5 +128,5 @@ assets/
 - le chemin du bon de commande créé,
 - les dossiers `assets/` nouvellement déclarés (le cas échéant),
 - les features prérequises non encore designées (le cas échéant),
-- la ligne du cahier des charges à mettre à jour : Design → `design écrit`, Assets → `bon de commande émis` ou `n/a`,
+- la ligne du cahier des charges mise à jour par toi : Design → `design écrit`, Assets → `bon de commande émis` ou `n/a`,
 - la prochaine étape attendue : `specifier`.

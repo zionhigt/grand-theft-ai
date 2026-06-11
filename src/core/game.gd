@@ -1,4 +1,4 @@
-class_name Game
+class_name Main
 extends Node
 
 var version_label: String = ""

@@ -4,3 +4,8 @@
 export_presets.cfg
 export.cfg
 .import/
+
+# Artefacts de conversion d'assets (re-téléchargeables depuis Mixamo)
+assets/import/processed/
+assets/import/*.fbm/
+assets/import/*.zip
