@@ -53,6 +53,46 @@ func test_le_joueur_est_un_corps_avec_collision() -> void:
 	assert_not_null((collision as CollisionShape3D).shape, "le joueur doit avoir une forme de collision")
 
 
+func test_le_modele_charge_idle_et_marche() -> void:
+	var joueur: Node = load("res://scenes/player.tscn").instantiate()
+	add_child_autofree(joueur)
+	var modele: Node = joueur.get_node("Modele")
+	var player: AnimationPlayer = modele.find_child("AnimationPlayer", true, false)
+	assert_not_null(player, "le modèle doit exposer un AnimationPlayer")
+	assert_true(player.has_animation("mixamo_com"), "l'idle natif doit être présent")
+	assert_true(player.has_animation("marche"), "la marche doit avoir été injectée")
+
+
+func test_la_marche_est_sur_place() -> void:
+	var joueur: Node = load("res://scenes/player.tscn").instantiate()
+	add_child_autofree(joueur)
+	var player: AnimationPlayer = joueur.get_node("Modele").find_child("AnimationPlayer", true, false)
+	var marche: Animation = player.get_animation("marche")
+	var idx := -1
+	for i in marche.get_track_count():
+		if marche.track_get_type(i) == Animation.TYPE_POSITION_3D and str(marche.track_get_path(i)).contains("Hips"):
+			idx = i
+			break
+	assert_gt(idx, -1, "la piste de position du bassin doit exister")
+	var base: Vector3 = marche.track_get_key_value(idx, 0)
+	var plat := true
+	for k in marche.track_get_key_count(idx):
+		var v: Vector3 = marche.track_get_key_value(idx, k)
+		if absf(v.x - base.x) > 0.001 or absf(v.z - base.z) > 0.001:
+			plat = false
+	assert_true(plat, "le déplacement horizontal du bassin doit être neutralisé (marche sur place)")
+
+
+func test_definir_vitesse_bascule_idle_marche() -> void:
+	var joueur: Node = load("res://scenes/player.tscn").instantiate()
+	add_child_autofree(joueur)
+	var modele: Node = joueur.get_node("Modele")
+	modele.definir_vitesse(4.0)
+	assert_eq(modele._anim_courante, "marche", "vitesse élevée -> marche")
+	modele.definir_vitesse(0.0)
+	assert_eq(modele._anim_courante, "mixamo_com", "vitesse nulle -> idle")
+
+
 func test_sans_input_la_direction_du_joueur_est_nulle() -> void:
 	var joueur: CharacterBody3D = load("res://scenes/player.tscn").instantiate()
 	add_child_autofree(joueur)

@@ -17,12 +17,13 @@ const ZOOM_PAS := 0.8
 @onready var _bras: SpringArm3D = $SpringArm3D
 
 var cible: Node3D
-var _yaw := 0.0
+var _yaw := PI  # démarre dans le dos du perso (qui regarde +Z au spawn)
 var _pitch := -0.25
 var _souris_capturee := true
 
 
 func _ready() -> void:
+	_bras.spring_length = ZOOM_MIN  # caméra au plus près du perso au démarrage
 	if not cible_path.is_empty():
 		definir_cible(get_node(cible_path))
 	_appliquer_capture(true)

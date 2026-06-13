@@ -9,7 +9,7 @@
 [node name="Monde" parent="." instance=ExtResource("1_monde")]
 
 [node name="Joueur" parent="." instance=ExtResource("2_joueur")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 
 [node name="CameraRig" parent="." instance=ExtResource("3_camera")]
 cible_path = NodePath("../Joueur")
