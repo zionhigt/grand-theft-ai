@@ -6,17 +6,16 @@
 
 | Fichier | Rôle (une ligne) |
 |---------|------------------|
-| `main.tscn` | scène d'entrée — assemble monde, joueur, voiture, caméra |
-| *(vide — le code v2 n'existe pas encore ; chaque nouveau fichier s'ajoute ici le jour où il est créé)* | |
+| `main.tscn` | scène d'entrée — assemble monde, joueur, caméra (voiture à venir) ; câble `CameraRig.cible = Joueur` |
+| `scenes/world.tscn` | monde minimal : sol 200×200 + collision, soleil directionnel à ombres, ciel procédural |
+| `src/player/player.gd` + `scenes/player.tscn` | joueur à pied : déplacement camera-relatif, gravité, orientation — `CharacterBody3D`, mock capsule |
+| `src/camera/camera_rig.gd` + `scenes/camera_rig.tscn` | caméra TPS : orbite clic droit, zoom molette, suit une `cible: Node3D` — `Node3D` → `SpringArm3D` → `Camera3D` |
 
 ### Structure cible (plan, pas encore créée)
 
 | Fichier prévu | Rôle prévu | Nœud racine |
 |---------------|------------|-------------|
-| `src/player/player.gd` + `scenes/player.tscn` | personnage à pied : déplacement camera-relatif, animations | `CharacterBody3D` |
-| `src/camera/camera_rig.gd` + `scenes/camera_rig.tscn` | caméra TPS : orbite souris, zoom, suit une cible | `Node3D` → `SpringArm3D` → `Camera3D` |
 | `src/vehicles/car.gd` + `scenes/car.tscn` | voiture conduisible | `VehicleBody3D` + 4 `VehicleWheel3D` |
-| `src/world/world.gd` + `scenes/world.tscn` | sol, ciel, lumière, bâtiments | `Node3D` |
 | `src/core/game.gd` (attaché à `main.tscn`) | orchestre l'état global et le basculement à pied ↔ en voiture | `Node3D` |
 
 ## Machine à états du joueur (dans `game.gd`)

@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=3 uid="uid://dmonde0minimal1"]
+
+[sub_resource type="PlaneMesh" id="MeshSol"]
+size = Vector2(200, 200)
+
+[sub_resource type="StandardMaterial3D" id="MatSol"]
+albedo_color = Color(0.29, 0.49, 0.23, 1)
+
+[sub_resource type="BoxShape3D" id="FormeSol"]
+size = Vector3(200, 1, 200)
+
+[sub_resource type="ProceduralSkyMaterial" id="MatCiel"]
+sky_top_color = Color(0.25, 0.45, 0.78, 1)
+sky_horizon_color = Color(0.74, 0.82, 0.89, 1)
+
+[sub_resource type="Sky" id="Ciel"]
+sky_material = SubResource("MatCiel")
+
+[sub_resource type="Environment" id="Env"]
+background_mode = 2
+sky = SubResource("Ciel")
+
+[node name="Monde" type="Node3D"]
+
+[node name="Sol" type="StaticBody3D" parent="."]
+
+[node name="SolMesh" type="MeshInstance3D" parent="Sol"]
+mesh = SubResource("MeshSol")
+surface_material_override/0 = SubResource("MatSol")
+
+[node name="SolCollision" type="CollisionShape3D" parent="Sol"]
+position = Vector3(0, -0.5, 0)
+shape = SubResource("FormeSol")
+
+[node name="Soleil" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-45, -30, 0)
+light_color = Color(1, 0.96, 0.88, 1)
+shadow_enabled = true
+
+[node name="Ciel" type="WorldEnvironment" parent="."]
+environment = SubResource("Env")

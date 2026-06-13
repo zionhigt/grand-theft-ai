@@ -1,3 +1,15 @@
-[gd_scene format=3 uid="uid://beo3i2dt0svpq"]
+[gd_scene load_steps=4 format=3 uid="uid://beo3i2dt0svpq"]
+
+[ext_resource type="PackedScene" uid="uid://dmonde0minimal1" path="res://scenes/world.tscn" id="1_monde"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_joueur"]
+[ext_resource type="PackedScene" path="res://scenes/camera_rig.tscn" id="3_camera"]
 
 [node name="Main" type="Node3D"]
+
+[node name="Monde" parent="." instance=ExtResource("1_monde")]
+
+[node name="Joueur" parent="." instance=ExtResource("2_joueur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="CameraRig" parent="." instance=ExtResource("3_camera")]
+cible = NodePath("../Joueur")
