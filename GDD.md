@@ -16,8 +16,9 @@ Explorer la ville à pied → repérer une voiture → monter dedans (E) → con
 |--------|--------|------------|
 | Z/W, S | avancer / reculer | accélérer / freiner-reculer |
 | Q/A, D | pas latéraux (relatifs à la caméra) | tourner |
-| Souris (clic droit maintenu) | orbiter la caméra | orbiter la caméra |
+| Souris (curseur capturé) | orienter la caméra — vue libre | orienter la caméra |
 | Molette | zoom caméra | zoom caméra |
+| Échap | libérer / recapturer le curseur | idem |
 | E | entrer dans la voiture proche | sortir |
 
 ## Direction visuelle

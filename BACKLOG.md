@@ -9,7 +9,7 @@ Statuts : `à faire` → `en cours` → `jouable` (validé par playtest utilisat
 | # | Itération | Statut | Assets nécessaires |
 |---|-----------|--------|--------------------|
 | 1 | **Monde minimal** : sol 200×200, ciel procédural, lumière directionnelle | jouable | aucun (mocks) |
-| 2 | **Joueur + caméra TPS** : capsule déplaçable camera-relatif, SpringArm3D orbite souris + zoom | jouable | aucun (mock capsule) |
+| 2 | **Joueur + caméra TPS** : capsule déplaçable camera-relatif, caméra souris libre + zoom + amortissement | jouable | aucun (mock capsule) |
 | 3 | **Personnage 3D animé** : intégration `player_body.glb` + idle/walk, transitions d'anim | à faire | ✅ déjà livrés |
 | 4 | **Ville en blocs** : 8–12 bâtiments BoxMesh avec collisions, rues praticables | à faire | aucun (mocks) — packs CC0 négociables plus tard |
 | 5 | **Voiture conduisible** : VehicleBody3D + `car_body.glb`, accélérer/freiner/tourner | à faire | ✅ déjà livré |
@@ -18,6 +18,7 @@ Statuts : `à faire` → `en cours` → `jouable` (validé par playtest utilisat
 
 ## Bugs ouverts (issus des playtests)
 
+- **[corrigé ✓ validé playtest]** *(itér. 2)* Caméra figée « sur trépied » : elle ne suivait pas du tout le joueur (la capsule fuyait hors champ). Cause : `@export var cible: Node3D` câblé via `NodePath` dans le `.tscn` ne se résout pas → `cible` null → `_process` ne déplaçait jamais le rig. Correctif : export d'un `cible_path: NodePath` (résolu par `get_node` dans `_ready`), `cible` devient un champ runtime. Test comportemental ajouté.
 - **[corrigé ✓ validé playtest]** *(itér. 2)* En un point précis du sol, la capsule passait en vue FPS (le `SpringArm3D` se rétractait à zéro car son rayon heurtait la capsule du joueur). Correctif : couches de collision séparées — joueur sur couche 2, bras de caméra `collision_mask = 1` (n'observe que l'environnement, jamais le joueur). L'exclusion par RID seule n'était pas fiable.
 
 ## Plus tard (v0.2+)

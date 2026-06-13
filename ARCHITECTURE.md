@@ -7,9 +7,9 @@
 | Fichier | Rôle (une ligne) |
 |---------|------------------|
 | `main.tscn` | scène d'entrée — assemble monde, joueur, caméra (voiture à venir) ; câble `CameraRig.cible = Joueur` |
-| `scenes/world.tscn` | monde minimal : sol 200×200 + collision, soleil directionnel à ombres, ciel procédural |
-| `src/player/player.gd` + `scenes/player.tscn` | joueur à pied : déplacement camera-relatif, gravité, orientation — `CharacterBody3D`, mock capsule |
-| `src/camera/camera_rig.gd` + `scenes/camera_rig.tscn` | caméra TPS : orbite clic droit, zoom molette, suit une `cible: Node3D` — `Node3D` → `SpringArm3D` → `Camera3D` |
+| `scenes/world.tscn` | monde minimal : sol 200×200 + collision, soleil directionnel à ombres, ciel procédural, 4 piliers-repères colorés (MOCK temporaire de playtest, remplacés par la ville itér. 4) |
+| `src/player/player.gd` + `scenes/player.tscn` | joueur à pied : déplacement camera-relatif, gravité, orientation — `CharacterBody3D` couche 2, mock capsule |
+| `src/camera/camera_rig.gd` + `scenes/camera_rig.tscn` | caméra TPS classique : souris libre (curseur capturé), Échap libère, zoom molette, suit une `cible: Node3D` avec amortissement — `Node3D` → `SpringArm3D` → `Camera3D` |
 
 ### Structure cible (plan, pas encore créée)
 

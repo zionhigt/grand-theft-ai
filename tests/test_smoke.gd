@@ -40,7 +40,9 @@ func test_main_contient_joueur_et_camera() -> void:
 	var principale: Node = load("res://main.tscn").instantiate()
 	add_child_autofree(principale)
 	assert_true(principale.get_node("Joueur") is CharacterBody3D, "main.tscn doit instancier le Joueur")
-	assert_true(principale.get_node("CameraRig") is Node3D, "main.tscn doit instancier le CameraRig")
+	var rig: Node = principale.get_node("CameraRig")
+	assert_true(rig is Node3D, "main.tscn doit instancier le CameraRig")
+	assert_eq(rig.cible, principale.get_node("Joueur"), "le rig doit suivre le Joueur (cible câblée)")
 
 
 func test_le_joueur_est_un_corps_avec_collision() -> void:
@@ -64,6 +66,29 @@ func test_le_rig_a_un_bras_et_une_camera_active() -> void:
 	assert_true(bras is SpringArm3D, "le rig doit avoir un SpringArm3D")
 	var camera: Node = bras.get_node("Camera3D")
 	assert_true((camera as Camera3D).current, "la caméra du rig doit être active")
+
+
+func test_le_rig_se_rapproche_de_la_cible_deplacee() -> void:
+	var principale: Node = load("res://main.tscn").instantiate()
+	add_child_autofree(principale)
+	var rig: Node3D = principale.get_node("CameraRig")
+	var joueur: Node3D = principale.get_node("Joueur")
+	joueur.global_position = Vector3(25, 1, 25)
+	var distance_avant := rig.global_position.distance_to(joueur.global_position)
+	for _i in 20:
+		rig._process(0.1)
+	var distance_apres := rig.global_position.distance_to(joueur.global_position)
+	assert_lt(distance_apres, distance_avant, "le rig doit se rapprocher de la cible quand elle se déplace")
+
+
+func test_la_souris_oriente_la_camera() -> void:
+	var rig: Node = load("res://scenes/camera_rig.tscn").instantiate()
+	add_child_autofree(rig)
+	var yaw_avant: float = rig._yaw
+	var motion := InputEventMouseMotion.new()
+	motion.relative = Vector2(120, 0)
+	rig._unhandled_input(motion)
+	assert_ne(rig._yaw, yaw_avant, "un mouvement souris (curseur capturé) doit réorienter la caméra")
 
 
 func test_definir_cible_assigne_la_cible() -> void:

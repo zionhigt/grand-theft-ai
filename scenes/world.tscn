@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dmonde0minimal1"]
+[gd_scene load_steps=13 format=3 uid="uid://dmonde0minimal1"]
 
 [sub_resource type="PlaneMesh" id="MeshSol"]
 size = Vector2(200, 200)
@@ -20,6 +20,24 @@ sky_material = SubResource("MatCiel")
 background_mode = 2
 sky = SubResource("Ciel")
 
+[sub_resource type="BoxMesh" id="MeshRepere"]
+size = Vector3(2, 6, 2)
+
+[sub_resource type="BoxShape3D" id="FormeRepere"]
+size = Vector3(2, 6, 2)
+
+[sub_resource type="StandardMaterial3D" id="MatRepereN"]
+albedo_color = Color(0.86, 0.24, 0.24, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatRepereS"]
+albedo_color = Color(0.24, 0.45, 0.86, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatRepereE"]
+albedo_color = Color(0.9, 0.78, 0.2, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatRepereO"]
+albedo_color = Color(0.85, 0.4, 0.85, 1)
+
 [node name="Monde" type="Node3D"]
 
 [node name="Sol" type="StaticBody3D" parent="."]
@@ -39,3 +57,45 @@ shadow_enabled = true
 
 [node name="Ciel" type="WorldEnvironment" parent="."]
 environment = SubResource("Env")
+
+[node name="Reperes" type="Node3D" parent="."]
+
+[node name="RepereNord" type="StaticBody3D" parent="Reperes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -14)
+
+[node name="Mesh" type="MeshInstance3D" parent="Reperes/RepereNord"]
+mesh = SubResource("MeshRepere")
+surface_material_override/0 = SubResource("MatRepereN")
+
+[node name="Collision" type="CollisionShape3D" parent="Reperes/RepereNord"]
+shape = SubResource("FormeRepere")
+
+[node name="RepereSud" type="StaticBody3D" parent="Reperes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 14)
+
+[node name="Mesh" type="MeshInstance3D" parent="Reperes/RepereSud"]
+mesh = SubResource("MeshRepere")
+surface_material_override/0 = SubResource("MatRepereS")
+
+[node name="Collision" type="CollisionShape3D" parent="Reperes/RepereSud"]
+shape = SubResource("FormeRepere")
+
+[node name="RepereEst" type="StaticBody3D" parent="Reperes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 3, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Reperes/RepereEst"]
+mesh = SubResource("MeshRepere")
+surface_material_override/0 = SubResource("MatRepereE")
+
+[node name="Collision" type="CollisionShape3D" parent="Reperes/RepereEst"]
+shape = SubResource("FormeRepere")
+
+[node name="RepereOuest" type="StaticBody3D" parent="Reperes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 3, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Reperes/RepereOuest"]
+mesh = SubResource("MeshRepere")
+surface_material_override/0 = SubResource("MatRepereO")
+
+[node name="Collision" type="CollisionShape3D" parent="Reperes/RepereOuest"]
+shape = SubResource("FormeRepere")
