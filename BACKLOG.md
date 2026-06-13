@@ -9,16 +9,16 @@ Statuts : `à faire` → `en cours` → `jouable` (validé par playtest utilisat
 | # | Itération | Statut | Assets nécessaires |
 |---|-----------|--------|--------------------|
 | 1 | **Monde minimal** : sol 200×200, ciel procédural, lumière directionnelle | jouable | aucun (mocks) |
-| 2 | **Joueur + caméra TPS** : capsule déplaçable camera-relatif, SpringArm3D orbite souris + zoom | en cours | aucun (mock capsule) |
+| 2 | **Joueur + caméra TPS** : capsule déplaçable camera-relatif, SpringArm3D orbite souris + zoom | jouable | aucun (mock capsule) |
 | 3 | **Personnage 3D animé** : intégration `player_body.glb` + idle/walk, transitions d'anim | à faire | ✅ déjà livrés |
 | 4 | **Ville en blocs** : 8–12 bâtiments BoxMesh avec collisions, rues praticables | à faire | aucun (mocks) — packs CC0 négociables plus tard |
 | 5 | **Voiture conduisible** : VehicleBody3D + `car_body.glb`, accélérer/freiner/tourner | à faire | ✅ déjà livré |
 | 6 | **Entrer / sortir (E)** : machine à états A_PIED ↔ EN_VOITURE, caméra qui suit la cible active | à faire | ✅ anims car_enter/exit livrées (intégration optionnelle ici, peaufinage en 7) |
-| 7 | **Polish v0.1** : animations véhicule, feel caméra, corrections du grand playtest | à faire | — |
+| 7 | **Polish v0.1** : animations véhicule, feel caméra (dont caméra qui se replace doucement derrière le sens de marche), corrections du grand playtest | à faire | — |
 
 ## Bugs ouverts (issus des playtests)
 
-*(vide)*
+- **[corrigé ✓ validé playtest]** *(itér. 2)* En un point précis du sol, la capsule passait en vue FPS (le `SpringArm3D` se rétractait à zéro car son rayon heurtait la capsule du joueur). Correctif : couches de collision séparées — joueur sur couche 2, bras de caméra `collision_mask = 1` (n'observe que l'environnement, jamais le joueur). L'exclusion par RID seule n'était pas fiable.
 
 ## Plus tard (v0.2+)
 
