@@ -57,9 +57,31 @@ func test_main_contient_joueur_et_camera() -> void:
 	var principale: Node = load("res://main.tscn").instantiate()
 	add_child_autofree(principale)
 	assert_true(principale.get_node("Joueur") is CharacterBody3D, "main.tscn doit instancier le Joueur")
+	assert_true(principale.get_node("Voiture") is VehicleBody3D, "main.tscn doit instancier la Voiture")
 	var rig: Node = principale.get_node("CameraRig")
 	assert_true(rig is Node3D, "main.tscn doit instancier le CameraRig")
-	assert_eq(rig.cible, principale.get_node("Joueur"), "le rig doit suivre le Joueur (cible câblée)")
+	assert_eq(rig.cible, principale.get_node("Joueur"), "au démarrage la caméra cible le Joueur (à pied)")
+
+
+func test_monter_et_descendre_de_la_voiture() -> void:
+	var principale: Node = load("res://main.tscn").instantiate()
+	add_child_autofree(principale)
+	var joueur: Node = principale.get_node("Joueur")
+	var voiture: Node = principale.get_node("Voiture")
+	var rig: Node = principale.get_node("CameraRig")
+	# Départ à pied.
+	assert_true(joueur.actif, "départ : joueur actif")
+	assert_false(voiture.actif, "départ : voiture inactive")
+	# Monter.
+	principale._monter()
+	assert_false(joueur.actif, "en voiture : joueur inactif")
+	assert_true(voiture.actif, "en voiture : voiture active")
+	assert_eq(rig.cible, voiture, "en voiture : caméra sur la voiture")
+	# Descendre.
+	principale._descendre()
+	assert_true(joueur.actif, "à pied : joueur actif")
+	assert_false(voiture.actif, "à pied : voiture inactive")
+	assert_eq(rig.cible, joueur, "à pied : caméra sur le joueur")
 
 
 func test_le_joueur_est_un_corps_avec_collision() -> void:
@@ -114,6 +136,23 @@ func test_sans_input_la_direction_du_joueur_est_nulle() -> void:
 	var joueur: CharacterBody3D = load("res://scenes/player.tscn").instantiate()
 	add_child_autofree(joueur)
 	assert_eq(joueur._direction_voulue(), Vector3.ZERO, "sans touche pressée, aucune direction")
+
+
+func test_la_voiture_a_quatre_roues() -> void:
+	var voiture: Node = load("res://scenes/car.tscn").instantiate()
+	add_child_autofree(voiture)
+	assert_true(voiture is VehicleBody3D, "la voiture doit être un VehicleBody3D")
+	var roues: Array = voiture.find_children("*", "VehicleWheel3D", true, false)
+	assert_eq(roues.size(), 4, "la voiture doit avoir 4 VehicleWheel3D")
+
+
+func test_voiture_inactive_coupe_le_moteur() -> void:
+	var voiture: VehicleBody3D = load("res://scenes/car.tscn").instantiate()
+	voiture.actif = false
+	add_child_autofree(voiture)
+	voiture._physics_process(0.1)
+	assert_eq(voiture.engine_force, 0.0, "voiture inactive : moteur coupé")
+	assert_gt(voiture.brake, 0.0, "voiture inactive : frein serré")
 
 
 func test_le_rig_a_un_bras_et_une_camera_active() -> void:

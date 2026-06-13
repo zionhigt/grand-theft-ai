@@ -9,10 +9,27 @@ const FREINAGE := 16.0
 const GRAVITE := 22.0
 const VITESSE_ROTATION := 8.0
 
+## Le joueur ne lit ses inputs que lorsqu'il est actif (piloté par l'orchestrateur game.gd).
+@export var actif := true
+
 @onready var _modele: Node = $Modele
+@onready var _collision: CollisionShape3D = $Collision
+
+
+## Active/désactive le joueur d'un bloc (appelé par game.gd quand on monte/descend de voiture).
+## Inactif = invisible, sans collision (ne gêne pas la voiture), immobile.
+func definir_actif(valeur: bool) -> void:
+	actif = valeur
+	visible = valeur
+	_collision.set_deferred("disabled", not valeur)
+	velocity = Vector3.ZERO  # repart d'une vitesse propre (évite la chute accumulée hors-jeu)
 
 
 func _physics_process(delta: float) -> void:
+	# Inactif (dans la voiture) : gelé — ni gravité ni déplacement (sa collision est coupée).
+	if not actif:
+		return
+
 	# Gravité — garde la capsule posée au sol.
 	if not is_on_floor():
 		velocity.y -= GRAVITE * delta

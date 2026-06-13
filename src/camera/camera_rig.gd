@@ -3,8 +3,6 @@ extends Node3D
 ## Le rig suit la cible avec amortissement (lerp), Échap libère/recapture le curseur, molette = zoom.
 ## Elle ignore la nature de la cible — joueur ou voiture, ce n'est qu'un Node3D à suivre.
 
-## Cible initiale, câblée dans la scène (NodePath fiable, contrairement à un export Node3D direct).
-@export var cible_path: NodePath
 @export var sensibilite := 0.0035
 @export var vitesse_suivi := 9.0
 
@@ -24,8 +22,6 @@ var _souris_capturee := true
 
 func _ready() -> void:
 	_bras.spring_length = ZOOM_MIN  # caméra au plus près du perso au démarrage
-	if not cible_path.is_empty():
-		definir_cible(get_node(cible_path))
 	_appliquer_capture(true)
 
 

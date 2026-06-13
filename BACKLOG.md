@@ -12,12 +12,14 @@ Statuts : `à faire` → `en cours` → `jouable` (validé par playtest utilisat
 | 2 | **Joueur + caméra TPS** : capsule déplaçable camera-relatif, caméra souris libre + zoom + amortissement | jouable | aucun (mock capsule) |
 | 3 | **Personnage 3D animé** : intégration `player_body.glb` + idle/walk, transitions d'anim | jouable | ✅ déjà livrés |
 | 4 | **Ville en blocs** : 8–12 bâtiments BoxMesh avec collisions, rues praticables | jouable | aucun (mocks) — packs CC0 négociables plus tard |
-| 5 | **Voiture conduisible** : VehicleBody3D + `car_body.glb`, accélérer/freiner/tourner | à faire | ✅ déjà livré |
-| 6 | **Entrer / sortir (E)** : machine à états A_PIED ↔ EN_VOITURE, caméra qui suit la cible active | à faire | ✅ anims car_enter/exit livrées (intégration optionnelle ici, peaufinage en 7) |
+| 5 | **Voiture conduisible** : VehicleBody3D + `car_body.glb`, accélérer/freiner/tourner | jouable | ✅ déjà livré |
+| 6 | **Entrer / sortir (E)** : machine à états A_PIED ↔ EN_VOITURE, caméra qui suit la cible active | jouable | ✅ anims car_enter/exit livrées (intégration optionnelle ici, peaufinage en 7) |
 | 7 | **Polish v0.1** : animations véhicule, feel caméra (dont caméra qui se replace doucement derrière le sens de marche), corrections du grand playtest | à faire | — |
 
 ## Bugs ouverts (issus des playtests)
 
+- **[corrigé ✓ validé playtest]** *(itér. 5)* On démarrait dans la voiture / conduite lourde / la voiture se retournait facilement et restait bloquée sur le toit. Correctifs : démarrage à pied + entrer-sortir (E) via `game.gd` (fusion itér. 6) ; moteur 1200→2600 N, masse 1000→850, frein-moteur réduit ; centre de masse abaissé (−0,4 m) + auto-redressement après ~1,5 s renversée.
+- **[corrigé ✓ validé playtest]** *(itér. 6)* À la descente après avoir roulé, le joueur tombait à l'infini (caméra dans le sol). Cause : le joueur inactif gardait son `_physics_process` (gravité + `move_and_slide`) collision coupée → chute accumulée hors-jeu, puis transpercement au repositionnement. Correctif : joueur inactif **gelé** (sortie immédiate de `_physics_process`) + vitesse remise à zéro à chaque (dé)activation.
 - **[corrigé ✓ validé playtest]** *(itér. 3)* Root motion Mixamo : le perso glissait en avant puis se réinitialisait à chaque boucle (« mini-film ») et orbitait en cercle en tournant. Correctif : neutralisation du déplacement horizontal du bassin (`_verrouiller_sur_place`), anim jouée sur place, déplacement géré par le code.
 - **[corrigé ✓ validé playtest]** *(itér. 3)* Demi-tour mécanique. Correctif : rotation lissée (framerate-indépendante) + pivot « engagé » (`_facteur_avance` ralentit au-delà de ~90°).
 - **[corrigé ✓ validé playtest]** *(itér. 3)* Le joueur tombait au démarrage (spawn à y=1,5 au lieu de 0,9). Correctif : spawn à y=0,9 dans `main.tscn`.
@@ -66,3 +68,16 @@ Tir / visée, PNJ, trafic, audio, HUD, missions. Rien ici ne se discute avant qu
   - Génération par code (`ville.gd`) pour pouvoir, plus tard, swapper chaque mock par `batiment_N.glb` une fois livré.
 - **Critère jouable** : une petite ville en blocs autour de moi ; je circule dans les rues sans traverser les murs ; la caméra ne traverse pas les bâtiments quand je m'en approche.
 - **Tests smoke** : `world.tscn` a un nœud `Ville` avec 8 `StaticBody3D`, chacun doté d'une `CollisionShape3D`.
+
+#### Itération 5 — Voiture conduisible
+- **Comportement** :
+  - `Voiture` = `VehicleBody3D` (masse ~1000 kg) + 4 `VehicleWheel3D` (avant = direction, arrière = traction), carrosserie = `car_body.glb` à l'échelle 0,01 (~1,67 × 1,35 × 4,26 m).
+  - Quand `actif` : `drive_forward/backward` → force moteur, `drive_left/right` → braquage progressif, frein au relâché. Quand inactif : moteur coupé, frein serré.
+  - Le joueur reçoit un flag `actif` symétrique (couture pour l'itér. 6). Pour cette itération : joueur parqué (`actif=false`), voiture active, caméra ciblée sur la voiture.
+- **Critère jouable** : je conduis la voiture (avance/recule, freine, tourne) avec du poids ; elle ne traverse pas les bâtiments ; la caméra la suit sans à-coup.
+- **Tests smoke** : `car.tscn` instancie un `VehicleBody3D` avec 4 `VehicleWheel3D` ; voiture inactive → `engine_force == 0` ; `main.tscn` contient `Voiture` et la caméra la cible.
+
+#### Itération 6 — Entrer / sortir (E) *(fusionnée avec la 5 suite au playtest)*
+- **Comportement** : orchestrateur `game.gd` (sur `Main`). Démarrage **à pied**. Près de la voiture (<4 m), **E** monte (joueur masqué/inactif, voiture active, caméra sur la voiture) ; **E** redescend le joueur sur le flanc gauche, au sol. `game.gd` est le seul à changer l'état (`actif`, `definir_cible`).
+- **Critère jouable** : je démarre à pied, je marche jusqu'à la voiture, E pour conduire, E pour ressortir, la caméra suit toujours la bonne cible.
+- **Tests smoke** : `_monter()`/`_descendre()` basculent `actif` joueur/voiture et la cible caméra ; au démarrage la caméra cible le joueur.

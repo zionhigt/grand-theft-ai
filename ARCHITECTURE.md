@@ -6,19 +6,14 @@
 
 | Fichier | Rôle (une ligne) |
 |---------|------------------|
-| `main.tscn` | scène d'entrée — assemble monde, joueur, caméra (voiture à venir) ; câble `CameraRig.cible = Joueur` |
+| `main.tscn` | scène d'entrée — assemble monde, joueur, voiture, caméra ; câble `CameraRig.cible` sur l'entité active (la Voiture en itér. 5, basculé par `game.gd` en itér. 6) |
 | `scenes/world.tscn` | monde : sol 200×200 + collision, soleil directionnel à ombres, ciel procédural, nœud `Ville` |
 | `src/world/ville.gd` | attaché à `Ville` : pose par code 8 bâtiments mock BoxMesh (`StaticBody3D` couche 1) en grille 3×3, rues praticables — à swapper par `batiment_N.glb` une fois livrés |
 | `src/player/player.gd` + `scenes/player.tscn` | joueur à pied : déplacement camera-relatif, gravité, orientation — `CharacterBody3D` couche 2, collision capsule + nœud `Modele` visuel animé |
 | `src/player/modele_anime.gd` | attaché à `Modele` : charge `player_idle.glb` (mesh+squelette), injecte la marche de `player_walk.glb`, bascule idle↔marche en fondu via `definir_vitesse()` |
 | `src/camera/camera_rig.gd` + `scenes/camera_rig.tscn` | caméra TPS classique : souris libre (curseur capturé), Échap libère, zoom molette, suit une `cible: Node3D` avec amortissement — `Node3D` → `SpringArm3D` → `Camera3D` |
-
-### Structure cible (plan, pas encore créée)
-
-| Fichier prévu | Rôle prévu | Nœud racine |
-|---------------|------------|-------------|
-| `src/vehicles/car.gd` + `scenes/car.tscn` | voiture conduisible | `VehicleBody3D` + 4 `VehicleWheel3D` |
-| `src/core/game.gd` (attaché à `main.tscn`) | orchestre l'état global et le basculement à pied ↔ en voiture | `Node3D` |
+| `src/vehicles/car.gd` + `scenes/car.tscn` | voiture conduisible : `VehicleBody3D` (masse 850, centre de masse abaissé) + 4 `VehicleWheel3D` (avant=direction, arrière=traction), carrosserie `car_body.glb` ×0.01 ; lit `drive_*` quand `actif`, auto-redressement si renversée |
+| `src/core/game.gd` (attaché à `main.tscn` → nœud `Main`) | orchestrateur : machine à états à pied ↔ en voiture, gère `interact` (E), bascule `actif` du joueur/voiture et `CameraRig.definir_cible` — seul endroit qui change d'état |
 
 ## Machine à états du joueur (dans `game.gd`)
 
