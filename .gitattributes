@@ -1,0 +1,13 @@
+# Fins de ligne normalisées en LF — évite le churn CRLF sous Windows (core.autocrlf).
+* text=auto eol=lf
+
+# Binaires : aucune conversion de fins de ligne.
+*.glb binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ogg binary
+*.wav binary
+*.dll binary
+*.so binary
+*.dylib binary
