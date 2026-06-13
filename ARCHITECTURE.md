@@ -7,7 +7,8 @@
 | Fichier | Rôle (une ligne) |
 |---------|------------------|
 | `main.tscn` | scène d'entrée — assemble monde, joueur, caméra (voiture à venir) ; câble `CameraRig.cible = Joueur` |
-| `scenes/world.tscn` | monde minimal : sol 200×200 + collision, soleil directionnel à ombres, ciel procédural, 4 piliers-repères colorés (MOCK temporaire de playtest, remplacés par la ville itér. 4) |
+| `scenes/world.tscn` | monde : sol 200×200 + collision, soleil directionnel à ombres, ciel procédural, nœud `Ville` |
+| `src/world/ville.gd` | attaché à `Ville` : pose par code 8 bâtiments mock BoxMesh (`StaticBody3D` couche 1) en grille 3×3, rues praticables — à swapper par `batiment_N.glb` une fois livrés |
 | `src/player/player.gd` + `scenes/player.tscn` | joueur à pied : déplacement camera-relatif, gravité, orientation — `CharacterBody3D` couche 2, collision capsule + nœud `Modele` visuel animé |
 | `src/player/modele_anime.gd` | attaché à `Modele` : charge `player_idle.glb` (mesh+squelette), injecte la marche de `player_walk.glb`, bascule idle↔marche en fondu via `definir_vitesse()` |
 | `src/camera/camera_rig.gd` + `scenes/camera_rig.tscn` | caméra TPS classique : souris libre (curseur capturé), Échap libère, zoom molette, suit une `cible: Node3D` avec amortissement — `Node3D` → `SpringArm3D` → `Camera3D` |

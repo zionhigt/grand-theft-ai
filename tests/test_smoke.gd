@@ -28,6 +28,23 @@ func test_le_monde_a_une_lumiere_avec_ombres() -> void:
 	assert_true((soleil as DirectionalLight3D).shadow_enabled, "le soleil doit projeter des ombres")
 
 
+func test_la_ville_pose_des_batiments_avec_collision() -> void:
+	var monde: Node = load("res://scenes/world.tscn").instantiate()
+	add_child_autofree(monde)
+	var ville: Node = monde.get_node("Ville")
+	var batiments: Array = []
+	for enfant in ville.get_children():
+		if enfant is StaticBody3D:
+			batiments.append(enfant)
+	assert_eq(batiments.size(), 8, "la ville doit poser 8 bâtiments")
+	for b in batiments:
+		var collision: Node = null
+		for e in b.get_children():
+			if e is CollisionShape3D:
+				collision = e
+		assert_not_null(collision, "chaque bâtiment doit avoir une CollisionShape3D")
+
+
 func test_le_monde_a_un_environnement_ciel() -> void:
 	var monde: Node = load("res://scenes/world.tscn").instantiate()
 	add_child_autofree(monde)

@@ -11,7 +11,7 @@ Statuts : `à faire` → `en cours` → `jouable` (validé par playtest utilisat
 | 1 | **Monde minimal** : sol 200×200, ciel procédural, lumière directionnelle | jouable | aucun (mocks) |
 | 2 | **Joueur + caméra TPS** : capsule déplaçable camera-relatif, caméra souris libre + zoom + amortissement | jouable | aucun (mock capsule) |
 | 3 | **Personnage 3D animé** : intégration `player_body.glb` + idle/walk, transitions d'anim | jouable | ✅ déjà livrés |
-| 4 | **Ville en blocs** : 8–12 bâtiments BoxMesh avec collisions, rues praticables | à faire | aucun (mocks) — packs CC0 négociables plus tard |
+| 4 | **Ville en blocs** : 8–12 bâtiments BoxMesh avec collisions, rues praticables | jouable | aucun (mocks) — packs CC0 négociables plus tard |
 | 5 | **Voiture conduisible** : VehicleBody3D + `car_body.glb`, accélérer/freiner/tourner | à faire | ✅ déjà livré |
 | 6 | **Entrer / sortir (E)** : machine à états A_PIED ↔ EN_VOITURE, caméra qui suit la cible active | à faire | ✅ anims car_enter/exit livrées (intégration optionnelle ici, peaufinage en 7) |
 | 7 | **Polish v0.1** : animations véhicule, feel caméra (dont caméra qui se replace doucement derrière le sens de marche), corrections du grand playtest | à faire | — |
@@ -57,3 +57,12 @@ Tir / visée, PNJ, trafic, audio, HUD, missions. Rien ici ne se discute avant qu
   - Le personnage s'oriente vers sa direction de marche (déjà en place depuis l'itér. 2).
 - **Critère jouable** : je vois un vrai bonhomme (plus de capsule), à la bonne taille, posé au sol ; il reste en idle à l'arrêt et marche quand j'avance, transition douce, orienté vers où il va.
 - **Tests smoke** : `player.tscn` a un nœud `Modele` ; après `_ready` le modèle expose un `AnimationPlayer` avec l'idle (`mixamo_com`) **et** la marche injectée ; `definir_vitesse()` bascule l'anim logique.
+
+#### Itération 4 — Ville en blocs
+- **Comportement** :
+  - 8 bâtiments mock BoxMesh (tailles variées, gris) disposés en grille 3×3 (la cellule centrale = place de spawn), séparés par des rues praticables (~10–12 m).
+  - Chaque bâtiment est un `StaticBody3D` couche 1 avec collision boîte : le joueur ne traverse pas les murs, la caméra (bras `mask=1`) évite de passer à travers.
+  - Les 4 piliers-repères temporaires de l'itér. 2 sont remplacés par la ville.
+  - Génération par code (`ville.gd`) pour pouvoir, plus tard, swapper chaque mock par `batiment_N.glb` une fois livré.
+- **Critère jouable** : une petite ville en blocs autour de moi ; je circule dans les rues sans traverser les murs ; la caméra ne traverse pas les bâtiments quand je m'en approche.
+- **Tests smoke** : `world.tscn` a un nœud `Ville` avec 8 `StaticBody3D`, chacun doté d'une `CollisionShape3D`.
